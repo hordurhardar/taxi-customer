@@ -159,12 +159,14 @@ class AuthProvider with ChangeNotifier {
             AppStrings.token, verifyOtpResponse.data?.token.toString() ?? '');
 
         setFromType = FromAuthType.fromSignUp;
-        Navigator.of(context).pushNamed(EnableLocationAccess.routeName);
-        // if(verifyOtpResponse.data?.user?.isProfileCompleted  != null && verifyOtpResponse.data?.user?.isProfileCompleted == false){
-        //   Navigator.of(context).pushReplacementNamed(CompleteProfileScreen.routeName);
-        // } else {
-        //   Navigator.of(context).pushReplacementNamed(BottomBarScreen.routeName);
-        // }
+        // Navigator.of(context).pushNamed(EnableLocationAccess.routeName);
+        if (verifyOtpResponse.data?.user?.isProfileCompleted != null &&
+            verifyOtpResponse.data?.user?.isProfileCompleted == false) {
+          Navigator.of(context)
+              .pushReplacementNamed(CompleteProfileScreen.routeName);
+        } else {
+          Navigator.of(context).pushReplacementNamed(BottomBarScreen.routeName);
+        }
       } else {
         showSnackBar(
             context: context,
@@ -312,7 +314,7 @@ class AuthProvider with ChangeNotifier {
             loginResponse.data?.user?.country.toString() ?? '');
         if (loginResponse.data?.user?.isProfileCompleted ?? false) {
           Navigator.of(context).pushNamedAndRemoveUntil(
-            BottomBarScreen.routeName,
+            EnableLocationAccess.routeName,
             (route) => false,
           );
         } else {

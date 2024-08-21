@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -64,7 +65,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop:onWillPop,
+      onWillPop: onWillPop,
       child: CustomScaffold(
         body: Padding(
           padding: const EdgeInsets.only(right: 20.0, left: 20.0),
@@ -219,6 +220,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   }
                   if (context.read<AuthProvider>().getFromType ==
                       FromAuthType.fromForgotPassword) {
+                    log('verify otp from forgot-pass');
                     context.read<AuthProvider>().verifyOtpApi(
                         context: context,
                         otp: otpController.text,
@@ -226,9 +228,11 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                     return;
                   } else if (context.read<AuthProvider>().getFromType ==
                       FromAuthType.fromProfile) {
+                    log('verify otp from profile');
                     context.read<AuthProvider>().verifyOtpApiProfile(
                         context: context, otp: otpController.text);
                   }
+                  log('verify otp from general');
                   context.read<AuthProvider>().verifyOtpApiSignUp(
                       context: context,
                       otp: otpController.text,

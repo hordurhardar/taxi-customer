@@ -6,11 +6,14 @@ import 'package:taxi/CommonWidgets/text_widget.dart';
 import 'package:taxi/Providers/BookRideProvider/book_ride_provider.dart';
 import 'package:taxi/Providers/DestinationProvider/destination_provider.dart';
 import 'package:taxi/Providers/HomeProvider/home_provider.dart';
+import 'package:taxi/Screens/Home/Payment/add_card_screen.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_images.dart';
 import 'package:taxi/Utils/helper_methods.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:taxi/Widgets/common_footer_widget.dart';
+import 'package:taxi/Widgets/list_tile_card_widget.dart';
+import 'package:taxi/Widgets/svg_picture.dart';
 import 'package:taxi/Widgets/toolbar.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
@@ -25,8 +28,8 @@ class PaymentMethodScreen extends StatefulWidget {
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   List timeSlot = [
     {'label': 'Cash', 'value': 1},
-    //   {'label': 'Loyalty Points', 'value': 2},
-    //  {'label': 'Wallet', 'value': 3},
+    {'label': 'Loyalty Points', 'value': 2},
+    {'label': 'Wallet', 'value': 3},
   ];
 
   List paymentOptions = [
@@ -127,69 +130,87 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                           );
                         })),
                         heightGap(10),
-                        // TextWidget(
-                        //   text: AppLocalizations.of(context)!.creditDebitCard,
-                        //   fontSize: 20,
-                        //   color: AppColors.blackColor,
-                        //   fontWeight: FontWeight.w500,
-                        // ),
-                        // heightGap(8),
-                        // InkWell(onTap: () {
-                        //   Navigator.of(context).pushNamed(AddCardScreen.routeName);
-                        // },child: ListTileCardWidget(title: AppLocalizations.of(context)!.addCard, arrowColor: AppColors.primary,icon: AppImages.walletYellow,)),
-                        // heightGap(10),
-                        // TextWidget(
-                        //   text: AppLocalizations.of(context)!.morePaymentOptions,
-                        //   fontSize: 20,
-                        //   color: AppColors.blackColor,
-                        //   fontWeight: FontWeight.w500,
-                        // ),
-                        // heightGap(10),
-                        // Card(
-                        //   elevation: 5,
-                        //   child: Column(
-                        //       children: List.generate(paymentOptions.length, (index) {
-                        //         final item = paymentOptions[index];
-                        //         return Padding(
-                        //           padding: const EdgeInsets.only(top: 4.0,bottom: 4.0),
-                        //           child: Column(
-                        //             children: [
-                        //               Padding(
-                        //                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        //                 child: Row(
-                        //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //                   children: [
-                        //                     SvgPic(image: item['icon']),
-                        //                     widthGap(8),
-                        //                     Expanded(
-                        //                       child: Text(
-                        //                         (item['label']),
-                        //                         // style: Typographies.largeBodyStyle(),
-                        //                       ),
-                        //                     ),
-                        //                     Radio(
-                        //                         activeColor: AppColors.primary,
-                        //                         value: item['value'],
-                        //                         groupValue: value.paymentOptionsValue,
-                        //                         onChanged: (value) {
-                        //                           // setState(() {
-                        //                           //   _paymentOptionsValue = value!;
-                        //                           // });
-                        //                           context.read<BookRideProvider>().selectMorePaymentOptions(type: value!);
-                        //
-                        //                           context.read<BookRideProvider>().selectPaymentMethod(type: item['label']);
-                        //
-                        //                         }),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //               if(index != paymentOptions.length - 1)
-                        //                 const Divider()
-                        //             ],
-                        //           ),
-                        //         );
-                        //       })),
-                        // ),
+                        TextWidget(
+                          text: AppLocalizations.of(context)!.creditDebitCard,
+                          fontSize: 20,
+                          color: AppColors.blackColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        heightGap(8),
+                        InkWell(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(AddCardScreen.routeName);
+                            },
+                            child: ListTileCardWidget(
+                              title: AppLocalizations.of(context)!.addCard,
+                              arrowColor: AppColors.primary,
+                              icon: AppImages.walletYellow,
+                            )),
+                        heightGap(10),
+                        TextWidget(
+                          text:
+                              AppLocalizations.of(context)!.morePaymentOptions,
+                          fontSize: 20,
+                          color: AppColors.blackColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        heightGap(10),
+                        Card(
+                          elevation: 5,
+                          child: Column(
+                              children:
+                                  List.generate(paymentOptions.length, (index) {
+                            final item = paymentOptions[index];
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 4.0, bottom: 4.0),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SvgPic(image: item['icon']),
+                                        widthGap(8),
+                                        Expanded(
+                                          child: Text(
+                                            (item['label']),
+                                            // style: Typographies.largeBodyStyle(),
+                                          ),
+                                        ),
+                                        Radio(
+                                            activeColor: AppColors.primary,
+                                            value: item['value'],
+                                            groupValue:
+                                                value.paymentOptionsValue,
+                                            onChanged: (value) {
+                                              // setState(() {
+                                              //   _paymentOptionsValue = value!;
+                                              // });
+                                              context
+                                                  .read<BookRideProvider>()
+                                                  .selectMorePaymentOptions(
+                                                      type: value!);
+
+                                              context
+                                                  .read<BookRideProvider>()
+                                                  .selectPaymentMethod(
+                                                      type: item['label']);
+                                            }),
+                                      ],
+                                    ),
+                                  ),
+                                  if (index != paymentOptions.length - 1)
+                                    const Divider()
+                                ],
+                              ),
+                            );
+                          })),
+                        ),
                       ],
                     ),
                   ),

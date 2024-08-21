@@ -5,6 +5,7 @@ import 'package:taxi/CommonWidgets/elevated_button_widget.dart';
 import 'package:taxi/CommonWidgets/text_widget.dart';
 import 'package:taxi/Providers/AuthProvider/auth_provider.dart';
 import 'package:taxi/Screens/Auth/SignIn/sign_in_screen.dart';
+import 'package:taxi/Screens/Settings/ManageAddress/manage_address_screen.dart';
 import 'package:taxi/Screens/Settings/password_manager_screen.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_images.dart';
@@ -37,21 +38,22 @@ class SettingScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
             child: Column(
               children: [
-                // ListTile(
-                //   contentPadding: EdgeInsets.zero,
-                //   onTap: () {},
-                //   leading: const SvgPic(image: AppImages.notificationsetting),
-                //   title: TextWidget(
-                //     text: AppLocalizations.of(context)!.notificationSettings,
-                //   ),
-                //   trailing: const SvgPic(image: AppImages.arrowForwardYellow),
-                // ),
-                // const Divider(
-                //   height: 12,
-                // ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  onTap: () {},
+                  leading: const SvgPic(image: AppImages.notificationsetting),
+                  title: TextWidget(
+                    text: AppLocalizations.of(context)!.notificationSettings,
+                  ),
+                  trailing: const SvgPic(image: AppImages.arrowForwardYellow),
+                ),
+                const Divider(
+                  height: 12,
+                ),
                 ListTile(
                   onTap: () {
-                    Navigator.of(context).pushNamed(PasswordManagerScreen.routeName);
+                    Navigator.of(context)
+                        .pushNamed(PasswordManagerScreen.routeName);
                   },
                   contentPadding: EdgeInsets.zero,
                   leading: const SvgPic(image: AppImages.key),

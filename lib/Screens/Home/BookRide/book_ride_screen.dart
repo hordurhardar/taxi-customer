@@ -555,7 +555,7 @@ class _BookRideScreenState extends State<BookRideScreen> {
                                                 .toString(),
                                       );
                                 },
-                                text: AppLocalizations.of(context)!.bookMini,
+                                text: "${AppLocalizations.of(context)!.bookMini} ",
                               )),
                             ),
                           ],

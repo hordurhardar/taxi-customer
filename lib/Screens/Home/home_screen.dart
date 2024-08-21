@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:taxi/CommonWidgets/custom_scaffold.dart';
 import 'package:taxi/CommonWidgets/text_form_field_widget.dart';
@@ -212,33 +213,47 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Card(
                                               color: AppColors.white,
                                               child: InkWell(
-                                                highlightColor: AppColors.primary.withOpacity(0.5),
-                                                focusColor: AppColors.primary.withOpacity(0.5),
-                                                onTap: (){
+                                                highlightColor: AppColors
+                                                    .primary
+                                                    .withOpacity(0.5),
+                                                focusColor: AppColors.primary
+                                                    .withOpacity(0.5),
+                                                onTap: () {
                                                   value.isEdit = true;
-                                                  value.selectedAddress = value.manageAddressList![index];
+                                                  value.selectedAddress =
+                                                      value.manageAddressList![
+                                                          index];
                                                   value.selectedType = value
-                                                      .selectedAddress!
-                                                      .addressType ??
+                                                          .selectedAddress!
+                                                          .addressType ??
                                                       'Home';
                                                   value.addressController.text =
-                                                      value.selectedAddress!.address ??
-                                                          AppLocalizations.of(context)!
+                                                      value.selectedAddress!
+                                                              .address ??
+                                                          AppLocalizations.of(
+                                                                  context)!
                                                               .enterHere;
                                                   value.floorController.text =
-                                                      value.selectedAddress!.floor ??
+                                                      value.selectedAddress!
+                                                              .floor ??
                                                           "";
-                                                  value.landmarkController.text =
-                                                      value.selectedAddress!.landmark ??
-                                                          "";
-                                                  Navigator.pushNamed(context, AddAddressScreen.routeName);
+                                                  value.landmarkController
+                                                      .text = value
+                                                          .selectedAddress!
+                                                          .landmark ??
+                                                      "";
+                                                  Navigator.pushNamed(
+                                                      context,
+                                                      AddAddressScreen
+                                                          .routeName);
                                                 },
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(12.0),
+                                                  padding: const EdgeInsets.all(
+                                                      12.0),
                                                   child: Column(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Center(
                                                         child: Container(
@@ -280,14 +295,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         textAlign:
                                                             TextAlign.center,
                                                         maxLines: 1,
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
-                                                        text: address?.address ??
-                                                            '',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        text:
+                                                            address?.address ??
+                                                                '',
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         fontSize: 13,
-                                                        color: AppColors.greyText,
+                                                        color:
+                                                            AppColors.greyText,
                                                       ),
                                                     ],
                                                   ),
