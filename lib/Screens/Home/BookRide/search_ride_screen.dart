@@ -35,7 +35,7 @@ class _SearchRideScreenState extends State<SearchRideScreen> {
   int _start = 60;
 
   Future<void> initSocket() async {
-    context.read<BookRideProvider>().getAllDriverApi(
+    await context.read<BookRideProvider>().getAllDriverApi(
           context: context,
         );
     socket = IO.io(
@@ -44,7 +44,9 @@ class _SearchRideScreenState extends State<SearchRideScreen> {
         'token': '${sharedPrefs?.getString(AppStrings.token)}'
       }).build(), // for Flutter or Dart VM
     );
+
     socket?.connect();
+
     socket?.on('receiveStatusUpdate', (data) async {
       log('acceptRide event received: $data');
       await context.read<BookRideProvider>().receivedStatusUpdate(
@@ -60,9 +62,11 @@ class _SearchRideScreenState extends State<SearchRideScreen> {
 
   @override
   void initState() {
-    print(sharedPrefs?.getString(AppStrings.token));
-    initSocket();
-    startTimer();
+    log(sharedPrefs?.getString(AppStrings.token) ?? "", name: "TOKEN");
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await initSocket();
+      startTimer();
+    });
     super.initState();
   }
 

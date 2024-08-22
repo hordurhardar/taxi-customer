@@ -222,7 +222,7 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                                               : '+354',
                                           favorite: const ['+354', 'FR'],
                                           // optional. Shows only country name and flag
-                                          showCountryOnly: false,
+                                          showCountryOnly: true,
                                           // optional. Shows only country name and flag when popup is closed.
                                           showOnlyCountryWhenClosed: false,
                                           // optional. aligns the flag and the Text left
@@ -357,7 +357,7 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                                                       .read<AuthProvider>()
                                                       .setEmail =
                                                   value.emailController.text;
-                                                    context
+                                              context
                                                   .read<AuthProvider>()
                                                   .countryCode = value
                                                       .profileData

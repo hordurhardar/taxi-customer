@@ -9,7 +9,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:taxi/Providers/AuthProvider/auth_provider.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_fonts.dart';
+import 'package:taxi/Utils/app_images.dart';
 import 'package:taxi/Utils/helper_methods.dart';
+import 'package:taxi/Widgets/svg_picture.dart';
 import '../../../Utils/validations.dart';
 import '../Content/content_screen.dart';
 
@@ -293,61 +295,62 @@ class SignUpScreen extends StatelessWidget {
                                     text: AppLocalizations.of(context)!.signUp,
                                   ),
                                   heightGap(20),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.center,
-                                  //   children: [
-                                  //     const SizedBox(width: 40, child: Divider()),
-                                  //     widthGap(10),
-                                  //     TextWidget(
-                                  //       color: AppColors.greyHint,
-                                  //       text: AppLocalizations.of(context)!
-                                  //           .orSignUpWith,
-                                  //     ),
-                                  //     widthGap(10),
-                                  //     const SizedBox(width: 40, child: Divider()),
-                                  //   ],
-                                  // ),
-                                  // heightGap(20),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.center,
-                                  //   children: [
-                                  //     Container(
-                                  //       width: 60,
-                                  //       height: 60,
-                                  //       decoration: BoxDecoration(
-                                  //           borderRadius: BorderRadius.circular(100),
-                                  //           border: Border.all(
-                                  //               color: AppColors.greyHint)),
-                                  //       child: const SvgPic(
-                                  //         image: AppImages.appleLogo,
-                                  //       ),
-                                  //     ),
-                                  //     widthGap(10),
-                                  //     Container(
-                                  //       width: 60,
-                                  //       height: 60,
-                                  //       decoration: BoxDecoration(
-                                  //           borderRadius: BorderRadius.circular(100),
-                                  //           border: Border.all(
-                                  //               color: AppColors.greyHint)),
-                                  //       child: const SvgPic(
-                                  //         image: AppImages.googleLogo,
-                                  //       ),
-                                  //     ),
-                                  //     widthGap(10),
-                                  //     Container(
-                                  //       width: 60,
-                                  //       height: 60,
-                                  //       decoration: BoxDecoration(
-                                  //           borderRadius: BorderRadius.circular(100),
-                                  //           border: Border.all(
-                                  //               color: AppColors.greyHint)),
-                                  //       child: const SvgPic(
-                                  //         image: AppImages.facebookLogo,
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(width: 40, child: Divider()),
+                                      widthGap(10),
+                                      TextWidget(
+                                        color: AppColors.greyHint,
+                                        text: AppLocalizations.of(context)!
+                                            .orSignUpWith,
+                                      ),
+                                      widthGap(10),
+                                      const SizedBox(width: 40, child: Divider()),
+                                    ],
+                                  ),
+                                  heightGap(20),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      
+                                      Container(
+                                        width: 60,
+                                        height: 60,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(100),
+                                            border: Border.all(
+                                                color: AppColors.greyHint)),
+                                        child: const SvgPic(
+                                          image: AppImages.appleLogo,
+                                        ),
+                                      ),
+                                      widthGap(10),
+                                      Container(
+                                        width: 60,
+                                        height: 60,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(100),
+                                            border: Border.all(
+                                                color: AppColors.greyHint)),
+                                        child: const SvgPic(
+                                          image: AppImages.googleLogo,
+                                        ),
+                                      ),
+                                      widthGap(10),
+                                      Container(
+                                        width: 60,
+                                        height: 60,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(100),
+                                            border: Border.all(
+                                                color: AppColors.greyHint)),
+                                        child: const SvgPic(
+                                          image: AppImages.facebookLogo,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -381,6 +384,21 @@ class SignUpScreen extends StatelessWidget {
           ),
         );
       }
+    );
+  }
+    Widget socialContainer({required String image, VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(color: AppColors.greyHint)),
+        child: SvgPic(
+          image: image,
+        ),
+      ),
     );
   }
 

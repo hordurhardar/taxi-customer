@@ -36,7 +36,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
           child: TextWidget(
             text: "Male",
           )),
-      const DropdownMenuItem(value: "Female", child: TextWidget(text: "Female")),
+      const DropdownMenuItem(
+          value: "Female", child: TextWidget(text: "Female")),
     ];
     return menuItems;
   }
@@ -77,7 +78,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       color: AppColors.greyHint,
                       textAlign: TextAlign.center,
                       fontSize: 13,
-                      text: AppLocalizations.of(context)!.doNotWorryPersonalData,
+                      text:
+                          AppLocalizations.of(context)!.doNotWorryPersonalData,
                     ),
                   ),
                 ),
@@ -111,7 +113,10 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                                 : Container(
                                     width: 100,
                                     height: 100,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: AppColors.greyBorder),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        color: AppColors.greyBorder),
                                     child: Image.asset(AppImages.user),
                                   );
                       },
@@ -121,12 +126,16 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       right: 0,
                       child: InkWell(
                         onTap: () async {
-                          await context.read<AuthProvider>().showBottomSheet(context: context);
+                          await context
+                              .read<AuthProvider>()
+                              .showBottomSheet(context: context);
                         },
                         child: Container(
                           width: 36,
                           height: 36,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: AppColors.primary),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: AppColors.primary),
                           child: const Icon(
                             Icons.edit_outlined,
                             color: AppColors.white,
@@ -194,27 +203,33 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               DropdownButtonFormField(
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: AppColors.greyBorder, width: 1),
+                      borderSide: const BorderSide(
+                          color: AppColors.greyBorder, width: 1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     border: OutlineInputBorder(
-                      borderSide: const BorderSide(color: AppColors.greyBorder, width: 1),
+                      borderSide: const BorderSide(
+                          color: AppColors.greyBorder, width: 1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     disabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: AppColors.greyBorder, width: 1),
+                      borderSide: const BorderSide(
+                          color: AppColors.greyBorder, width: 1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     errorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: AppColors.greyBorder, width: 1),
+                      borderSide: const BorderSide(
+                          color: AppColors.greyBorder, width: 1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: AppColors.greyBorder, width: 1),
+                      borderSide: const BorderSide(
+                          color: AppColors.greyBorder, width: 1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: AppColors.greyBorder, width: 1),
+                      borderSide: const BorderSide(
+                          color: AppColors.greyBorder, width: 1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     filled: true,
@@ -234,19 +249,19 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   items: dropdownItems),
               heightGap(30),
               ElevatedButtonWidget(
-                onPressed: 
-                () async {
-                    final update = await context.read<AuthProvider>().updateProfile(
-                          context: context,
-                          gender: selectedValue.toString(),
-                          profileImage: context.read<AuthProvider>().profileImageUrl,
-                          email: phoneNumberController.text,
-                   
-                        );
-                    if (update) {
-                      Navigator.of(context).pushNamed(EnableLocationAccess.routeName);
-                    }
-
+                onPressed: () async {
+                  final update =
+                      await context.read<AuthProvider>().updateProfile(
+                            context: context,
+                            gender: selectedValue.toString(),
+                            profileImage:
+                                context.read<AuthProvider>().profileImageUrl,
+                            email: phoneNumberController.text,
+                          );
+                  if (update) {
+                    Navigator.of(context)
+                        .pushNamed(EnableLocationAccess.routeName);
+                  }
                 },
                 width: double.infinity,
                 text: AppLocalizations.of(context)!.completeProfile,

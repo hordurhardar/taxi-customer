@@ -1,6 +1,11 @@
 // import 'dart:html';
 
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taxi/CommonWidgets/custom_scaffold.dart';
@@ -15,6 +20,7 @@ import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_fonts.dart';
 import 'package:taxi/Utils/app_images.dart';
 import 'package:taxi/Utils/helper_methods.dart';
+import 'package:taxi/Utils/social_login.dart';
 import 'package:taxi/Utils/validations.dart';
 import 'package:taxi/Widgets/svg_picture.dart';
 
@@ -381,27 +387,30 @@ class SignInScreen extends StatelessWidget {
                           //     socialContainer(
                           //       image: AppImages.googleLogo,
                           //       onTap: () async {
-                          //         final loginResult = await SocialLogin.instance.googleLogin();
-                          //
-                          //         if (loginResult.status) {
+                          //         final loginResult =
+                          //             await SocialLogin.instance.googleLogin();
+
+                          //         if (loginResult.status == true) {
+                          //           log("loginresponse=====>${loginResult.status}");
                           //           final jsonData = {
-                          //             "email": loginResult.emailAddress,
-                          //             //
-                          //             // "name": loginResult.name,
-                          //             // "type": "User",
-                          //             // "loginType":
-                          //             // loginResult.socialType,
-                          //             // "deviceToken":
-                          //             // await FirebaseMessaging
-                          //             //     .instance
-                          //             //     .getToken(),
-                          //             // "socialId":
-                          //             // loginResult.socialId
+                          //             "email": loginResult.emailAddress ?? "",
+                          //             "name": loginResult.name ?? "",
+                          //             "type": "User",
+                          //             "loginType": loginResult.socialType ?? "",
+                          //             "deviceToken": await FirebaseMessaging
+                          //                 .instance
+                          //                 .getToken(),
+                          //             "socialId": loginResult.socialId
                           //           };
+                          //           log("loginresponse=====>${jsonData.toString()}");
                           //           if (kDebugMode) {
                           //             print("$jsonData");
                           //           }
-                          //           await context.read<AuthProvider>().socialLoginApi(context: context, jsonData: jsonData);
+                          //           await context
+                          //               .read<AuthProvider>()
+                          //               .socialLoginApi(
+                          //                   context: context,
+                          //                   jsonData: jsonData);
                           //         } else {
                           //           log("message");
                           //         }
@@ -414,7 +423,7 @@ class SignInScreen extends StatelessWidget {
                           //     ),
                           //   ],
                           // ),
-                          // heightGap(10),
+                          heightGap(10),
                           Center(
                             child: richText(
                               context: context,

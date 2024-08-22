@@ -100,15 +100,15 @@ class ActiveWidget extends StatelessWidget {
                                             .cancel,
                                       ),
                                     ),
-                                    // widthGap(10),
-                                    // Expanded(
-                                    //   child: ElevatedButtonWidget(
-                                    //     onPressed: () {
-                                    //
-                                    //     },
-                                    //     text: AppLocalizations.of(context)!.reschedule,
-                                    //   ),
-                                    // ),
+                                    widthGap(10),
+                                    Expanded(
+                                      child: ElevatedButtonWidget(
+                                        onPressed: () {
+                                    
+                                        },
+                                        text: AppLocalizations.of(context)!.reschedule,
+                                      ),
+                                    ),
                                   ],
                                 )
                               ],

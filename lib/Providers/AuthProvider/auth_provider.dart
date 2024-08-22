@@ -196,7 +196,7 @@ class AuthProvider with ChangeNotifier {
         .callPostApi(context: context, url: tUpdateProfile, jsonData: {
       "gender": gender,
       "mobileNumber": mobile,
-      "countryCode": sharedPrefs?.getString(AppStrings.countryCode),
+      "countryCode": countryCode.toString().replaceAll("+", ""),
       "latitude": lat,
       "longitude": long,
       "address": address,
