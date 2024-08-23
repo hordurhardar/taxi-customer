@@ -20,7 +20,8 @@ class InviteScreen extends StatefulWidget {
 
 class InviteScreenState extends State<InviteScreen> {
   Iterable<Contact>? _contacts;
-  String appLink = 'https://play.google.com/store/apps/details?id=com.taxi.taxi247&pli=1';
+  String appLink =
+      'https://play.google.com/store/apps/details?id=com.taxi.taxi247&pli=1';
 
   @override
   void initState() {
@@ -30,7 +31,8 @@ class InviteScreenState extends State<InviteScreen> {
 
   Future<void> _fetchContacts() async {
     if (await Permission.contacts.request().isGranted) {
-      Iterable<Contact>? contacts = await ContactsService.getContacts(withThumbnails: false);
+      Iterable<Contact>? contacts =
+          await ContactsService.getContacts(withThumbnails: false);
       setState(() {
         _contacts = contacts;
       });
@@ -48,9 +50,9 @@ class InviteScreenState extends State<InviteScreen> {
     String url =
         'https://wa.me/${contact.phones!.first.value}?text=${Uri.encodeComponent(message)}';
 
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
+    final launched = await launchUrl(Uri.parse(url));
+
+    if (!launched) {
       throw 'Could not launch $url';
     }
   }

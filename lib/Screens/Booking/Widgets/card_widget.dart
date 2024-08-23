@@ -23,20 +23,23 @@ class CardWidget extends StatelessWidget {
   final String carType;
   final String startLocation;
   final String endLocation;
+  final String? driverId;
 
-  const CardWidget(
-      {super.key,
-      required this.driverImage,
-      required this.carType,
-      required this.name,
-      required this.rating,
-      required this.mile,
-      required this.min,
-      required this.rate,
-      required this.date,
-      required this.carNumber,
-      required this.startLocation,
-      required this.endLocation});
+  const CardWidget({
+    super.key,
+    required this.driverImage,
+    required this.carType,
+    required this.name,
+    required this.rating,
+    required this.mile,
+    required this.min,
+    required this.rate,
+    required this.date,
+    required this.carNumber,
+    required this.startLocation,
+    required this.endLocation,
+    this.driverId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,10 @@ class CardWidget extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed(DriverDetailsScreen.routeName);
+                Navigator.of(context).pushNamed(
+                  DriverDetailsScreen.routeName,
+                  arguments: {'driver_id': driverId},
+                );
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),

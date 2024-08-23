@@ -99,8 +99,8 @@ class ActiveRideLiveLocation extends StatelessWidget {
                                           InkWell(
                                             onTap: () {
                                               Navigator.of(context).pushNamed(
-                                                  DriverDetailsScreen
-                                                      .routeName);
+                                                DriverDetailsScreen.routeName,
+                                              );
                                             },
                                             child: Container(
                                               width: 42,

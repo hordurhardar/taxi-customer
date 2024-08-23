@@ -74,6 +74,11 @@ class BookRideProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void changeLoading(bool newValue) {
+    isLoading = newValue;
+    notifyListeners();
+  }
+
   Future<void> selectGender({required String gender}) async {
     this.gender = gender;
     sharedPrefs?.setString(AppStrings.selectedGender, gender);
@@ -98,14 +103,14 @@ class BookRideProvider with ChangeNotifier {
   Future<void> getPreBookRideListApi({
     required BuildContext context,
   }) async {
-    isLoading = true;
+    changeLoading(true);
     final data = await RemoteService().callGetApi(
       context: context,
       url:
           '$tPreBookList?lat=${context.read<HomeProvider>().currentPosition?.latitude}&long=${context.read<HomeProvider>().currentPosition?.longitude}',
     );
     if (data == null) {
-      isLoading = false;
+      changeLoading(false);
 
       return;
     }
@@ -113,12 +118,12 @@ class BookRideProvider with ChangeNotifier {
         PreBookRideListModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (prebookRideListResponse.status == 200) {
-        isLoading = false;
+        changeLoading(false);
 
         docs = prebookRideListResponse.data?.list?.docs ?? [];
         print(prebookRideListResponse);
       } else {
-        isLoading = false;
+        changeLoading(false);
         showSnackBar(
             context: context,
             message: prebookRideListResponse.statusText,
@@ -284,6 +289,7 @@ class BookRideProvider with ChangeNotifier {
     }
     final getVehicleListResponse =
         GetVehicleListModel.fromJson(jsonDecode(data.body));
+    log('vewhicle list resp => ${getVehicleListResponse.toJson()}');
     if (context.mounted) {
       if (getVehicleListResponse.status == 200) {
         isLoading = false;

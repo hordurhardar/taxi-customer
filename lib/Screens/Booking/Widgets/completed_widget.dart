@@ -47,8 +47,8 @@ class CompletedWidget extends StatelessWidget {
                                 children: [
                                   CardWidget(
                                     driverImage:
-                                        booking.driver?.profileImage ?? '',
-                                    name: booking.driver?.name ?? 'No Name',
+                                        booking.customer?.profileImage ?? '',
+                                    name: booking.customer?.name ?? 'No Name',
                                     rating: booking.driverRating.toString(),
                                     mile: booking.totalDistance ?? "",
                                     min: diff,

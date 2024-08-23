@@ -28,7 +28,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         .read<NotificationProvider>()
         .getNotificationApi(context: context)
         .then((value) {
-      scrollListener();
+      addscrollListener();
     });
     super.initState();
   }
@@ -108,17 +108,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                   "Are you sure you wish to delete this item?"),
                                               actions: <Widget>[
                                                 ElevatedButtonWidget(
-                                                    onPressed: () {
-                                                      return Navigator.of(
-                                                              context)
-                                                          .pop(false);
-                                                    },
-                                                    text: 'CANCEL'),
+                                                  onPressed: () {
+                                                    return Navigator.of(context)
+                                                        .pop(false);
+                                                  },
+                                                  text: 'CANCEL',
+                                                ),
                                                 ElevatedButtonWidget(
                                                     onPressed: () {
                                                       return Navigator.of(
-                                                              context)
-                                                          .pop(true);
+                                                        context,
+                                                      ).pop(true);
                                                     },
                                                     text: 'DELETE'),
                                               ],
@@ -218,11 +218,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  void scrollListener() {
+  void addscrollListener() {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        log("message------------>");
+        log("inside listner - if condition", name: "notification_sreen");
         if ((context.read<NotificationProvider>().currentPagination) <
             (context
                     .read<NotificationProvider>()

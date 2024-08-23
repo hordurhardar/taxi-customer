@@ -11,6 +11,7 @@ import 'package:taxi/Providers/HomeProvider/home_provider.dart';
 import 'package:taxi/Providers/Type/from_destination_type.dart';
 import 'package:taxi/Screens/Home/destination_screen.dart';
 import 'package:taxi/Screens/Home/pick_up_screen.dart';
+import 'package:taxi/Screens/Settings/ManageAddress/manage_address_screen.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_images.dart';
 import 'package:taxi/Utils/helper_methods.dart';
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       context.read<BookRideProvider>().initSocket(context);
     });
-
+    context.read<ManageAddressProvider>().getAllAddressApi(context: context);
     super.initState();
   }
 
@@ -123,11 +124,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextWidget(
-                            text: AppLocalizations.of(context)!.whereTo,
-                            fontSize: 20,
-                            color: AppColors.blackColor,
-                            fontWeight: FontWeight.w500,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextWidget(
+                                text: AppLocalizations.of(context)!.whereTo,
+                                fontSize: 20,
+                                color: AppColors.blackColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushNamed(ManageAddressScreen.routeName);
+                                },
+                                child: TextWidget(
+                                  text: AppLocalizations.of(context)!.manage,
+                                  fontSize: 14,
+                                  color: AppColors.primary,
+                                ),
+                              )
+                            ],
                           ),
                           heightGap(20),
                           Row(

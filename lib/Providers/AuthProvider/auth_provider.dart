@@ -260,7 +260,7 @@ class AuthProvider with ChangeNotifier {
     if (context.mounted) {
       if (imageUploadResponse.status == 200) {
         log(file.path);
-        profileImageUrl = file.path ?? '';
+        profileImageUrl = imageUploadResponse.data?.upload ?? '';
         isLoading = false;
         showSnackBar(
             context: context,

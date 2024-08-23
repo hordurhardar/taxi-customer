@@ -30,7 +30,7 @@ class ImageUploadModel {
 }
 
 class Data {
-  bool? upload;
+  String? upload;
 
   Data({this.upload});
 

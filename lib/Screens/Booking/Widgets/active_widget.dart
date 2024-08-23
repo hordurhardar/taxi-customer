@@ -38,17 +38,20 @@ class ActiveWidget extends StatelessWidget {
                     var diff = "0";
                     if (booking.startRideTime != null &&
                         booking.endRideTime != null) {
+                      log('inside condition - dates were not null.');
                       DateTime startDateTime = DateFormat("yyyy-MM-dd HH:mm")
-                          .parse(booking.startRideTime!);
+                          .parse(booking.startRideTime ?? '');
                       DateFormat targetFormat =
                           DateFormat("MMM dd, yyyy. | hh:mm a");
                       startRideTime = targetFormat.format(startDateTime);
-                      var endDateTime = DateTime.parse(booking.endRideTime!);
+                      var endDateTime =
+                          DateTime.parse(booking.endRideTime ?? '');
                       var dif = endDateTime.difference(startDateTime).inMinutes;
                       diff = dif.toString();
                     }
 
-                    print('Booking List Length: ${index}');
+                    print('Booking List Length: $index');
+                    log('customer id => ${booking.customer?.id}');
                     return booking.status == "Pending"
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -56,8 +59,8 @@ class ActiveWidget extends StatelessWidget {
                               children: [
                                 CardWidget(
                                   driverImage:
-                                      booking.driver?.profileImage ?? '',
-                                  name: booking.driver?.name ?? 'No Name',
+                                      booking.customer?.profileImage ?? '',
+                                  name: booking.customer?.name ?? 'No Name',
                                   rating: booking.driverRating.toString(),
                                   mile: booking.totalDistance ?? "",
                                   min: diff,
@@ -67,6 +70,7 @@ class ActiveWidget extends StatelessWidget {
                                   carType: booking.carType ?? '',
                                   startLocation: booking.pickupAddress ?? '',
                                   endLocation: booking.destinationAddress ?? '',
+                                  driverId: booking.customer?.id,
                                 ),
                                 heightGap(20),
                                 SizedBox(
@@ -103,10 +107,9 @@ class ActiveWidget extends StatelessWidget {
                                     widthGap(10),
                                     Expanded(
                                       child: ElevatedButtonWidget(
-                                        onPressed: () {
-                                    
-                                        },
-                                        text: AppLocalizations.of(context)!.reschedule,
+                                        onPressed: () {},
+                                        text: AppLocalizations.of(context)!
+                                            .reschedule,
                                       ),
                                     ),
                                   ],
@@ -166,10 +169,13 @@ class ActiveWidget extends StatelessWidget {
                               onPressed: () {
                                 Navigator.of(context).pop();
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => CancelTaxiBooking(
-                                            bookingId: bookingId)));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CancelTaxiBooking(
+                                      bookingId: bookingId,
+                                    ),
+                                  ),
+                                );
                               },
                               text: AppLocalizations.of(context)!.cancelRide,
                             ),

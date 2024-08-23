@@ -34,7 +34,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop:onWillPop,
+      onWillPop: onWillPop,
       child: CustomScaffold(
         extendBodyBehindAppBar: true,
         body: Center(child: _widgetOptions.elementAt(_selectedIndex)),

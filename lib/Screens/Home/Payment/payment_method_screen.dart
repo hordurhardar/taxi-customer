@@ -143,9 +143,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                   .pushNamed(AddCardScreen.routeName);
                             },
                             child: ListTileCardWidget(
-                              title: AppLocalizations.of(context)!.addCard,
+                              titleText: AppLocalizations.of(context)!.addCard,
                               arrowColor: AppColors.primary,
-                              icon: AppImages.walletYellow,
+                              leadingIconPath: AppImages.walletYellow,
                             )),
                         heightGap(10),
                         TextWidget(

@@ -246,7 +246,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case DriverDetailsScreen.routeName:
       return MaterialPageRoute(
         settings: settings,
-        builder: (_) => const DriverDetailsScreen(),
+        builder: (_) => DriverDetailsScreen(
+          driverId:
+              (settings.arguments as Map<String, dynamic>?)?['driver_id'] ?? '',
+        ),
       );
     case EmergencyScreen.routeName:
       return MaterialPageRoute(

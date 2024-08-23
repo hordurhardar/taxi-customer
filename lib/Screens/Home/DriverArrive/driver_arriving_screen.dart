@@ -13,6 +13,7 @@ import 'package:taxi/Providers/DriverProvider/driver_provider.dart';
 import 'package:taxi/Remote/api_config.dart';
 import 'package:taxi/Screens/Booking/CancelTaxiBooking/cancel_taxi_booking.dart';
 import 'package:taxi/Screens/Chat/chat_screen.dart';
+import 'package:taxi/Screens/Home/Driver/driver_details_screen.dart';
 import 'package:taxi/Screens/Home/PayCash/pay_cash_screen.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_images.dart';
@@ -128,7 +129,8 @@ class _DriverArrivingScreenState extends State<DriverArrivingScreen> {
                       //             widthGap(5),
                       //             Expanded(
                       //                 child: TextWidget(
-                      //               text: '10,000 ${AppLocalizations.of(context)!.areYourEstimatedRide}',
+                      //               text:
+                      //                   '10,000 ${AppLocalizations.of(context)!.areYourEstimatedRide}',
                       //               fontSize: 13,
                       //             )),
                       //           ],
@@ -459,10 +461,13 @@ class _DriverArrivingScreenState extends State<DriverArrivingScreen> {
                                                           ),
                                                         ),
                                                         // TextWidget(
-                                                        //   text: '5 ${AppLocalizations.of(context)!.minAway}',
+                                                        //   text:
+                                                        //       '5 ${AppLocalizations.of(context)!.minAway}',
                                                         //   fontSize: 14,
-                                                        //   fontWeight: FontWeight.w500,
-                                                        //   color: AppColors.greyText,
+                                                        //   fontWeight:
+                                                        //       FontWeight.w500,
+                                                        //   color: AppColors
+                                                        //       .greyText,
                                                         // ),
                                                       ],
                                                     ),
@@ -475,7 +480,16 @@ class _DriverArrivingScreenState extends State<DriverArrivingScreen> {
                                                       children: [
                                                         InkWell(
                                                           onTap: () {
-                                                            // Navigator.of(context).pushNamed(DriverDetailsScreen.routeName);
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pushNamed(
+                                                                    DriverDetailsScreen
+                                                                        .routeName,
+                                                                    arguments: {
+                                                                  'driver_id': value
+                                                                      .driverData
+                                                                      ?.driverId
+                                                                });
                                                           },
                                                           child: ClipRRect(
                                                             borderRadius:

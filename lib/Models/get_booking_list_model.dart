@@ -90,35 +90,36 @@ class BookingData {
   Set<Marker> markers = {};
   Set<Polyline>? polylines;
 
-  BookingData(
-      {this.pickupLocation,
-      this.dropLocation,
-      this.pickupAddress,
-      this.destinationAddress,
-      this.pickupLatitude,
-      this.pickupLongitude,
-      this.destinationLatitude,
-      this.destinationLongitude,
-      this.city,
-      this.state,
-      this.country,
-      this.landmark,
-      this.houseNo,
-      this.vehicleNumber,
-      this.vehicleColor,
-      this.amount,
-      this.status,
-      this.rideType,
-      this.bookForSelf,
-      this.otp,
-      this.id,
-      this.customer,
-      this.date,
-      this.driverGender,
-      this.createdAt,
-      this.updatedAt,
-      this.v,
-      this.driver});
+  BookingData({
+    this.pickupLocation,
+    this.dropLocation,
+    this.pickupAddress,
+    this.destinationAddress,
+    this.pickupLatitude,
+    this.pickupLongitude,
+    this.destinationLatitude,
+    this.destinationLongitude,
+    this.city,
+    this.state,
+    this.country,
+    this.landmark,
+    this.houseNo,
+    this.vehicleNumber,
+    this.vehicleColor,
+    this.amount,
+    this.status,
+    this.rideType,
+    this.bookForSelf,
+    this.otp,
+    this.id,
+    this.customer,
+    this.date,
+    this.driverGender,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+    this.driver,
+  });
 
   BookingData.fromJson(Map<String, dynamic> json) {
     pickupLocation = json["pickupLocation"] == null
@@ -129,10 +130,18 @@ class BookingData {
         : DropLocation.fromJson(json["dropLocation"]);
     pickupAddress = json["pickupAddress"];
     destinationAddress = json["destinationAddress"];
-    pickupLatitude = json["pickupLatitude"];
-    pickupLongitude = json["pickupLongitude"];
-    destinationLatitude = json["destinationLatitude"];
-    destinationLongitude = json["destinationLongitude"];
+    pickupLatitude = json["pickupLatitude"] is int
+        ? json['pickupLatitude'].toDouble()
+        : json['pickupLatitude'];
+    pickupLongitude = json["pickupLongitude"] is int
+        ? json['pickupLongitude'].toDouble()
+        : json['pickupLongitude'];
+    destinationLatitude = json["destinationLatitude"] is int
+        ? json['destinationLatitude'].toDouble()
+        : json['destinationLatitude'];
+    destinationLongitude = json["destinationLongitude"] is int
+        ? json['destinationLongitude'].toDouble()
+        : json['destinationLongitude'];
     city = json["city"];
     state = json["state"];
     country = json["country"];
@@ -662,7 +671,9 @@ class UserLocation {
     type = json["type"];
     coordinates = json["coordinates"] == null
         ? null
-        : List<double>.from(json["coordinates"]);
+        : (json['coordinates'] as List)
+            .map<double>((e) => double.parse(e.toString()))
+            .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -685,7 +696,9 @@ class DropLocation {
     type = json["type"];
     coordinates = json["coordinates"] == null
         ? null
-        : List<double>.from(json["coordinates"]);
+        : (json['coordinates'] as List)
+            .map<double>((e) => double.parse(e.toString()))
+            .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -708,7 +721,9 @@ class PickupLocation {
     type = json["type"];
     coordinates = json["coordinates"] == null
         ? null
-        : List<double>.from(json["coordinates"]);
+        : (json['coordinates'] as List)
+            .map<double>((e) => double.parse(e.toString()))
+            .toList();
   }
 
   Map<String, dynamic> toJson() {

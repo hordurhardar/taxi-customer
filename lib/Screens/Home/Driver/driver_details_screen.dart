@@ -19,7 +19,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class DriverDetailsScreen extends StatefulWidget {
   static const routeName = "/driverDetailsScreen";
 
-  const DriverDetailsScreen({super.key});
+  final String? driverId;
+
+  const DriverDetailsScreen({
+    super.key,
+    this.driverId,
+  });
 
   @override
   State<DriverDetailsScreen> createState() => _DriverDetailsScreenState();
@@ -34,8 +39,9 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen>
   @override
   void initState() {
     //TODO: Make dynamic the driver id here
-    context.read<DriverProvider>().getDriverDetailApi(
-        context: context, driverId: "661f568414d73a15a5bce04b");
+    context
+        .read<DriverProvider>()
+        .getDriverDetailApi(context: context, driverId: widget.driverId ?? '');
     super.initState();
   }
 

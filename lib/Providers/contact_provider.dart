@@ -6,15 +6,94 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:taxi/Screens/ContactRequest.dart';
+import 'package:taxi/Remote/api_config.dart';
+import 'package:taxi/Remote/remote_service.dart';
+import 'package:taxi/Screens/contact_request.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactProvider with ChangeNotifier {
   List<ContactRequest?> selectedContactList = [];
   List<ContactRequest> contactRequestList = [];
 
-  Future<void> selectContact({required ContactRequest contact}) async {
-    selectedContactList.add(contact);
+  List<ContactRequest> _emergencyContacts = [];
+  List<ContactRequest> _selectedContactsToSendAlert = [];
+  ContactRequest? _selectedEmergencyContact;
+
+  List<ContactRequest> get emergencyContacts => _emergencyContacts;
+  List<ContactRequest> get selectedContactsToSendAlert =>
+      _selectedContactsToSendAlert;
+  ContactRequest? get selectedEmergencyContact => _selectedEmergencyContact;
+
+  Future<void> fetchEmergencyContacts(BuildContext context) async {
+    final response = await RemoteService().callGetApi(
+      context: context,
+      url: tFetchemergencyContact,
+    );
+    log('fetch emergency resp => ${response?.body}');
+  }
+
+  Future<void> removeEmergencyContact(ContactRequest contact) async {
+    // TODO: API call to remove emergency contact
+
+    _emergencyContacts.remove(contact);
     notifyListeners();
+  }
+
+  Future<void> addEmergencyContact({Function(String)? onNotSelected}) async {
+    if (_selectedEmergencyContact == null) {
+      onNotSelected?.call('Please select a valid contact.');
+      return;
+    }
+    //TODO: API call to add emergency contact number
+
+    _emergencyContacts.add(_selectedEmergencyContact!);
+    selectEmergencyContact(null);
+    notifyListeners();
+  }
+
+  void selectEmergencyContact(ContactRequest? contact) {
+    _selectedEmergencyContact = contact;
+    notifyListeners();
+  }
+
+  void addRelationForEmergencyContact(String relation) {
+    _selectedEmergencyContact?.setRelation = relation;
+    notifyListeners();
+  }
+
+  void onSelectAllChanged(bool newValue) {
+    for (ContactRequest contact in _emergencyContacts) {
+      contact.setSelected = newValue;
+    }
+    notifyListeners();
+  }
+
+  void onEmergencyContactSelectionChanged(bool value, int index) {
+    _emergencyContacts[index].setSelected = value;
+    notifyListeners();
+  }
+
+  Future<void> sendEmergencyAlert() async {
+    for (ContactRequest contact in _emergencyContacts) {
+      log('${contact.name} is ${contact.isSelected ? null : 'not'} selected.');
+      if (!contact.isSelected) continue;
+
+      log('sending alert to ${contact.name}');
+
+      String message =
+          "Hey ${contact.name ?? contact.relation ?? ''}, *I'm in emergency right now.* Need you help.";
+
+      String url =
+          'https://wa.me/${contact.phone}?text=${Uri.encodeComponent(message)}';
+
+      final launched = await launchUrl(Uri.parse(url));
+
+      log('sent alert to ${contact.name} => $launched');
+
+      if (!launched) {
+        throw 'Could not launch $url';
+      }
+    }
   }
 
   Future<void> makeContactSelection({required int index}) async {
@@ -26,7 +105,12 @@ class ContactProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> askPermissions(
+  Future<void> selectContact({required ContactRequest contact}) async {
+    selectedContactList.add(contact);
+    notifyListeners();
+  }
+
+  Future<void> getContactListFromPhone(
       {required BuildContext context, bool fromGetStarted = true}) async {
     PermissionStatus permissionStatus = await _getContactPermission();
     if (permissionStatus == PermissionStatus.granted) {

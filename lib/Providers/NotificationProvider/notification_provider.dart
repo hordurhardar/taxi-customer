@@ -6,41 +6,51 @@ import 'package:taxi/Remote/api_config.dart';
 import 'package:taxi/Remote/remote_service.dart';
 import 'package:taxi/Utils/helper_methods.dart';
 
-
 class NotificationProvider with ChangeNotifier {
-  bool isLoading = false;
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
+
   int currentPagination = 1;
   GetNotificationModel getNotificaionModel = GetNotificationModel();
   List<NotificationListDocs> notificationList = [];
+
+  set _setLoading(bool newValue) {
+    _isLoading = newValue;
+    notifyListeners();
+  }
+
   Future<void> getNotificationApi({
     required BuildContext context,
   }) async {
-    isLoading = true;
+    _setLoading = true;
 
-    final data = await RemoteService().callGetApi( context: context,
+    final data = await RemoteService().callGetApi(
+      context: context,
       url: '$tNotification?page=$currentPagination',
     );
     if (data == null) {
-      isLoading = false;
+      _setLoading = false;
       return;
     }
     final notificationResponse =
-    GetNotificationModel.fromJson(jsonDecode(data.body));
+        GetNotificationModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (notificationResponse.status == 200) {
         getNotificaionModel = notificationResponse;
-        if(currentPagination==1){
+        if (currentPagination == 1) {
           notificationList.clear();
         }
-        notificationList.addAll(notificationResponse.data?.docs  ?? []);
-        isLoading = false;
+        notificationList.addAll(notificationResponse.data?.docs ?? []);
+        _setLoading = false;
         notifyListeners();
       } else {
-        isLoading = false;
+        _setLoading = false;
         showSnackBar(
-            context: context,
-            message: notificationResponse.message,
-            isSuccess: false);
+          context: context,
+          message: notificationResponse.message,
+          isSuccess: false,
+        );
       }
     }
     notifyListeners();
@@ -59,7 +69,8 @@ class NotificationProvider with ChangeNotifier {
       hideLoader(context);
       return;
     }
-    final deleteNotificationResponse = CommonModel.fromJson(jsonDecode(data.body));
+    final deleteNotificationResponse =
+        CommonModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (deleteNotificationResponse.status == 200) {
         hideLoader(context);
@@ -79,7 +90,6 @@ class NotificationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
   Future<void> readNotificationApi({
     required BuildContext context,
     required String id,
@@ -93,7 +103,8 @@ class NotificationProvider with ChangeNotifier {
       hideLoader(context);
       return;
     }
-    final readNotificationResponse = CommonModel.fromJson(jsonDecode(data.body));
+    final readNotificationResponse =
+        CommonModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (readNotificationResponse.status == 200) {
         hideLoader(context);

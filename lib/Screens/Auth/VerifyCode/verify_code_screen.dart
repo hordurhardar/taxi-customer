@@ -97,7 +97,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   TextWidget(
                     color: AppColors.primary,
                     textAlign: TextAlign.center,
-                    text: context.read<AuthProvider>().countryCode ?? "",
+                    text: context.read<AuthProvider>().countryCode,
                   ),
                   const TextWidget(
                     color: AppColors.primary,
@@ -107,7 +107,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   TextWidget(
                     color: AppColors.primary,
                     textAlign: TextAlign.center,
-                    text: context.read<AuthProvider>().getPhone ?? "",
+                    text: context.read<AuthProvider>().getPhone,
                   ),
                 ],
               ),

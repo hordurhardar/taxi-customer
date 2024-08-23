@@ -97,7 +97,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                               });
                             },
                             child: ListTileCardWidget(
-                                title:
+                                titleText:
                                     AppLocalizations.of(context)!.savedPlaces)),
                         heightGap(10),
                         if (context

@@ -44,8 +44,7 @@ class _BookRideScreenState extends State<BookRideScreen> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       context.read<DestinationProvider>().disableDropFieldCall(value: true);
 
-      if (context.read<HomeProvider>().currentPosition != null &&
-          context.read<HomeProvider>().currentPosition != null) {
+      if (context.read<HomeProvider>().currentPosition != null) {
         context.read<BookRideProvider>().makeLines(
               context: context,
               pickUpLatLng: PointLatLng(
@@ -179,8 +178,9 @@ class _BookRideScreenState extends State<BookRideScreen> {
                                         //  context.read<BookRideProvider>().updateLatLong();
                                       },
                                       child: ListTileCardWidget(
-                                          title: AppLocalizations.of(context)!
-                                              .now),
+                                          titleText:
+                                              AppLocalizations.of(context)!
+                                                  .now),
                                     ),
                                     heightGap(10),
                                     Consumer<BookRideProvider>(
@@ -430,8 +430,9 @@ class _BookRideScreenState extends State<BookRideScreen> {
                                         );
                                       },
                                       child: ListTileCardWidget(
-                                          title: AppLocalizations.of(context)!
-                                              .cash),
+                                          titleText:
+                                              AppLocalizations.of(context)!
+                                                  .cash),
                                     ),
                                     heightGap(10),
                                     InkWell(
@@ -441,8 +442,9 @@ class _BookRideScreenState extends State<BookRideScreen> {
                                         );
                                       },
                                       child: ListTileCardWidget(
-                                          title: AppLocalizations.of(context)!
-                                              .bookForSelf),
+                                        titleText: AppLocalizations.of(context)!
+                                            .bookForSelf,
+                                      ),
                                     ),
                                     heightGap(10),
                                     InkWell(
@@ -452,8 +454,9 @@ class _BookRideScreenState extends State<BookRideScreen> {
                                         );
                                       },
                                       child: ListTileCardWidget(
-                                          title: AppLocalizations.of(context)!
-                                              .applyPromo),
+                                          titleText:
+                                              AppLocalizations.of(context)!
+                                                  .applyPromo),
                                     ),
                                     heightGap(100),
                                   ],
@@ -555,7 +558,8 @@ class _BookRideScreenState extends State<BookRideScreen> {
                                                 .toString(),
                                       );
                                 },
-                                text: "${AppLocalizations.of(context)!.bookMini} ",
+                                text:
+                                    "${AppLocalizations.of(context)!.bookMini} ",
                               )),
                             ),
                           ],

@@ -109,43 +109,53 @@ class BookingProvider with ChangeNotifier {
         bookingList = bookingList.reversed.toList();
 
         ///TODO: check for the use case of it
-        /* await Future.forEach(bookingList, (BookingData bookingData) async {
-         bookingData.markers.add(
-             Marker(markerId: const MarkerId('1'),
-           position: LatLng(bookingData.pickupLatitude!,
-               bookingData.pickupLongitude!),
-           draggable: true,
-           onDragEnd: (value) {},
-           icon: BitmapDescriptor.fromBytes(
-               await getBytesFromAsset(AppImages.locationPinIcon, 50)),));
+        await Future.forEach(bookingList, (BookingData bookingData) async {
+          bookingData.markers.add(Marker(
+            markerId: const MarkerId('1'),
+            position: LatLng(
+                bookingData.pickupLatitude!, bookingData.pickupLongitude!),
+            draggable: true,
+            onDragEnd: (value) {},
+            icon: BitmapDescriptor.bytes(
+                await getBytesFromAsset(AppImages.locationPinIcon, 50)),
+          ));
 
-         bookingData.markers.add(
-             Marker(markerId: const MarkerId('2'),
-               position: LatLng(bookingData.destinationLatitude!,
-                   bookingData.destinationLongitude!),
-               draggable: true,
-               onDragEnd: (value) {},
-               icon: BitmapDescriptor.fromBytes(
-                   await getBytesFromAsset(AppImages.locationPinIcon, 50)),));
+          bookingData.markers.add(Marker(
+            markerId: const MarkerId('2'),
+            position: LatLng(bookingData.destinationLatitude!,
+                bookingData.destinationLongitude!),
+            draggable: true,
+            onDragEnd: (value) {},
+            icon: BitmapDescriptor.bytes(
+                await getBytesFromAsset(AppImages.locationPinIcon, 50)),
+          ));
 
+          List<LatLng> polylineCoordinates = [];
+          try {
+            var polylinePoints = PolylinePoints();
+            PolylineResult result =
+                await polylinePoints.getRouteBetweenCoordinates(
+              googleApiKey: GOOGLE_API_KEY,
+              request: PolylineRequest(
+                destination: PointLatLng(bookingData.destinationLatitude!,
+                    bookingData.destinationLongitude!),
+                origin: PointLatLng(
+                    bookingData.pickupLatitude!, bookingData.pickupLongitude!),
+                mode: TravelMode.driving,
+              ),
+            );
 
-        var polylinePoints = PolylinePoints();
-         List<LatLng> polylineCoordinates = [];
-         PolylineResult result = await polylinePoints
-             .getRouteBetweenCoordinates(
-           GOOGLE_API_KEY,
-           PointLatLng(bookingData.pickupLatitude!, bookingData.pickupLongitude!), //Starting LATLANG
-           PointLatLng(bookingData.destinationLatitude!, bookingData.destinationLongitude!), //Starting LATLANG
-           travelMode: TravelMode.driving,
-         );
-         for (var element in result.points) {
-           polylineCoordinates.add(LatLng(element.latitude, element.longitude));
+            for (var element in result.points) {
+              polylineCoordinates
+                  .add(LatLng(element.latitude, element.longitude));
+            }
 
-         }
-
-         bookingData.polylines?.add(addPolyLine(bookingData.id!, polylineCoordinates));
-
-       });*/
+            bookingData.polylines
+                ?.add(addPolyLine(bookingData.id!, polylineCoordinates));
+          } catch (e) {
+            log('error while getting route => $e');
+          }
+        });
         isLoading = false;
       } else {
         isLoading = false;

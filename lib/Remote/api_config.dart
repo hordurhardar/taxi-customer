@@ -5,9 +5,10 @@ const String BASE_URL = BASE_URL_LIVE;
 // const String BASE_URL_LIVE = 'http://192.168.1.47:9211/api/';
 const String BASE_URL_LIVE = 'http://13.50.11.124:5353/api/';
 // const String BASE_URL_LOCAL = 'http://192.168.0.131:9211/api/';
-const String BASE_URL_LOCAL = 'http://192.168.1.26:9211/api/';
-//const String IMAGE_URL = 'https://b2btobacco.s3.amazonaws.com/';
-const String IMAGE_URL = 'https://sugamaya.s3.amazonaws.com/';
+const String BASE_URL_LOCAL = 'http://192.168.1.67:9211/api/';
+// const String IMAGE_URL = 'https://b2btobacco.s3.amazonaws.com';
+// const String IMAGE_URL = 'https://sugamaya.s3.amazonaws.com';
+const String IMAGE_URL = 'https://taxi-app.s3.eu-west-1.amazonaws.com';
 const String GOOGLE_API_KEY = 'AIzaSyDbxbcNuOlVTolfigYexsDVfyHNrpeQ_eI';
 
 String tSignUp = 'app/auth/sign-up';
@@ -54,6 +55,8 @@ String tGetContent = 'common/get-content';
 String tGetBookingList = 'app/booking/get-booking-list-customer';
 String tGetBooking = 'app/booking/get-booking';
 String tCancelBooking = 'app/booking/cancel-ride';
+String tFetchemergencyContact = 'app/.....';
+String tAddEmergencyContact = 'app/.....';
 
 class ApiConfig {
   //static String getCategoryList = "common/category-listing";
