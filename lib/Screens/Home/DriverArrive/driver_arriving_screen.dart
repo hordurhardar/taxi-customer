@@ -186,7 +186,7 @@ class _DriverArrivingScreenState extends State<DriverArrivingScreen> {
                                                       Expanded(
                                                         child: TextWidget(
                                                           text:
-                                                              '${bookRideValue.receiveStatusUpdateModel?.data?.status ?? ''} Ride',
+                                                              '${'Active' ?? bookRideValue.receiveStatusUpdateModel?.data?.status ?? ''} Ride',
                                                           fontSize: 20,
                                                           fontWeight:
                                                               FontWeight.w500,

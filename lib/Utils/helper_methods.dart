@@ -4,8 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:taxi/CommonWidgets/elevated_button_widget.dart';
 import 'package:taxi/CommonWidgets/text_widget.dart';
 import 'package:taxi/Screens/Auth/SignIn/sign_in_screen.dart';
+import 'package:taxi/Screens/Booking/CancelTaxiBooking/cancel_taxi_booking.dart';
 import 'package:taxi/Screens/contact_request.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_fonts.dart';
@@ -305,6 +307,71 @@ Future<void> showContactListSheet({
     useSafeArea: true,
     builder: (BuildContext context) {
       return ContactSheetWidget(onSelect: onSelect);
+    },
+  );
+}
+
+
+Future<void> showCancelDialog(BuildContext context, String bookingId) {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          backgroundColor: AppColors.white,
+          surfaceTintColor: AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Column(
+                  children: [
+                    TextWidget(
+                      text:
+                          '${AppLocalizations.of(context)!.cancelWithIn} 3 mins ${AppLocalizations.of(context)!.otherwisePayCancellationFee}',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.black,
+                    ),
+                    heightGap(20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButtonWidget(
+                            elevation: 0,
+                            primary: AppColors.greyStatusBar,
+                            textColor: AppColors.primary,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            text: AppLocalizations.of(context)!.skip,
+                          ),
+                        ),
+                        widthGap(10),
+                        Expanded(
+                          child: ElevatedButtonWidget(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CancelTaxiBooking(
+                                    bookingId: bookingId,
+                                  ),
+                                ),
+                              );
+                            },
+                            text: AppLocalizations.of(context)!.cancelRide,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ]));
     },
   );
 }

@@ -722,18 +722,21 @@ class BookRideProvider with ChangeNotifier {
       return;
     }
 
-    log("Book Response = ${data.body}");
+    log("Booked Response = ${data.body}");
     final bookResponse = CommonModel.fromJson(jsonDecode(data.body));
-    log("data2 ==========> ${data.body}");
 
     if (context.mounted) {
       if (bookResponse.status == 200) {
         hideLoader(context);
         showSnackBar(
-            context: context, message: bookResponse.message, isSuccess: true);
+          context: context,
+          message: bookResponse.message,
+          isSuccess: true,
+        );
 
         if (rideType == "Now") {
-          Navigator.of(context).pushNamed(SearchRideScreen.routeName);
+          Navigator.of(context).pushNamed(SearchRideScreen.routeName,
+              arguments: {'booking_id': 'bookResponse.data'});
         } else {
           showSnackBar(
               context: context,

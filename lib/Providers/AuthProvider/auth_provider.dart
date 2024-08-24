@@ -192,8 +192,7 @@ class AuthProvider with ChangeNotifier {
   }) async {
     showLoaderDialog(context);
 
-    final data = await RemoteService()
-        .callPostApi(context: context, url: tUpdateProfile, jsonData: {
+    final data = {
       "gender": gender,
       "mobileNumber": mobile,
       "countryCode": countryCode.toString().replaceAll("+", ""),
@@ -204,17 +203,25 @@ class AuthProvider with ChangeNotifier {
       "profileImage": profileImage,
       "name": name,
       "isProfileCompleted": true,
-    });
+    };
 
-    if (data == null) {
-      log("updateprofile==========>${data?.body}");
+    log("updateprofile - resp ==========> $data");
+
+    final resp = await RemoteService().callPostApi(
+      context: context,
+      url: tUpdateProfile,
+      jsonData: data,
+    );
+
+    log("updateprofile - resp ==========> ${resp?.body}");
+
+    if (resp == null) {
       hideLoader(context);
       return false;
     }
 
     final updateProfileResponse =
-        UpdateProfileModel.fromJson(jsonDecode(data.body));
-    log("updateprofile==========>${data?.body}");
+        UpdateProfileModel.fromJson(jsonDecode(resp.body));
 
     if (context.mounted) {
       if (updateProfileResponse.status == 200) {
@@ -262,10 +269,12 @@ class AuthProvider with ChangeNotifier {
         log(file.path);
         profileImageUrl = imageUploadResponse.data?.upload ?? '';
         isLoading = false;
+        log('image uploaded => $profileImageUrl');
         showSnackBar(
-            context: context,
-            message: imageUploadResponse.message,
-            isSuccess: true);
+          context: context,
+          message: imageUploadResponse.message,
+          isSuccess: true,
+        );
       } else {
         showSnackBar(
             context: context,

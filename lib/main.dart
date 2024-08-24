@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi/Providers/LanguageProvider/language_provider.dart';
 import 'package:taxi/Providers/app_provider.dart';
+import 'package:taxi/Remote/remote_service.dart';
 import 'package:taxi/Screens/Splash/splash_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

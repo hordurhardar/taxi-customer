@@ -106,10 +106,10 @@ class ActiveRideLiveLocation extends StatelessWidget {
                                               width: 42,
                                               height: 42,
                                               decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                  color: AppColors.primary),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                color: AppColors.primary,
+                                              ),
                                             ),
                                           ),
                                           widthGap(10),
