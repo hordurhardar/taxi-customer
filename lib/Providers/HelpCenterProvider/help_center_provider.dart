@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:taxi/Models/common_model.dart';
@@ -20,7 +21,8 @@ class HelpCenterProvider with ChangeNotifier {
   }) async {
     isLoading = true;
 
-    final data = await RemoteService().callGetApi( context: context,
+    final data = await RemoteService().callGetApi(
+      context: context,
       url: '',
     );
     if (data == null) {
@@ -34,33 +36,47 @@ class HelpCenterProvider with ChangeNotifier {
         isLoading = false;
       } else {
         isLoading = false;
-        showSnackBar(context: context, message: faqListResponse.message, isSuccess: false);
+        showSnackBar(
+            context: context,
+            message: faqListResponse.message,
+            isSuccess: false);
       }
     }
     notifyListeners();
   }
+
   Future<void> updateTermsConditionCheckBoxValue({required bool value}) async {
     termsConditionCheck = value;
     notifyListeners();
   }
-  Future<void> getContentApi({required BuildContext context, String? slug}) async {
+
+  Future<void> getContentApi(
+      {required BuildContext context, String? slug}) async {
     isLoading = true;
-    final data = await RemoteService().callGetApi( context: context,
+
+    print('api is starts');
+    final data = await RemoteService().callGetApi(
+      context: context,
       url: "$tGetContent/$slug",
     );
     isLoading = false;
+    print('api is calling done${data?.body}');
     if (data == null) {
       isLoading = false;
       return;
     }
     final faqListResponse = ContentDataResponse.fromJson(jsonDecode(data.body));
+    log("faqListResponse=========>${faqListResponse.data}");
     if (context.mounted) {
       if (faqListResponse.status == 200) {
         content = faqListResponse.data?.data ?? [];
         isLoading = false;
       } else {
         isLoading = false;
-        showSnackBar(context: context, message: faqListResponse.message, isSuccess: false);
+        showSnackBar(
+            context: context,
+            message: faqListResponse.message,
+            isSuccess: false);
       }
     }
     notifyListeners();

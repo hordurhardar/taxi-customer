@@ -16,7 +16,6 @@ class ActiveAtDestinationScreen extends StatelessWidget {
 
   const ActiveAtDestinationScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -46,8 +45,7 @@ class ActiveAtDestinationScreen extends StatelessWidget {
                               topLeft: Radius.circular(12),
                               topRight: Radius.circular(12))),
                       child: Padding(
-                        padding:
-                        const EdgeInsets.only(right: 20.0, left: 20.0),
+                        padding: const EdgeInsets.only(right: 20.0, left: 20.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -61,13 +59,15 @@ class ActiveAtDestinationScreen extends StatelessWidget {
                                         width: 100,
                                         height: 3,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                           color: AppColors.greyBorder,
                                         ),
                                       ),
                                     ),
                                     heightGap(20),
-                                    const SvgPic(image: AppImages.locationWithCheck),
+                                    const SvgPic(
+                                        image: AppImages.locationWithCheck),
                                     heightGap(20),
                                     TextWidget(
                                       text: AppLocalizations.of(context)!
@@ -82,15 +82,17 @@ class ActiveAtDestinationScreen extends StatelessWidget {
                                       fontWeight: FontWeight.w500,
                                       color: AppColors.greyHint,
                                     ),
-
                                   ],
                                 ),
                               ),
                             ),
-                            ElevatedButtonWidget(onPressed: () {
-                              Navigator.of(context).pushNamed(PayCashScreen.routeName);
-                            }, text: '${AppLocalizations.of(context)!
-                                .payCash} \$12.5'),
+                            ElevatedButtonWidget(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(PayCashScreen.routeName);
+                                },
+                                text:
+                                    '${AppLocalizations.of(context)!.payCash} kr12.5'),
                             heightGap(20),
                           ],
                         ),

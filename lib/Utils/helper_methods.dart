@@ -1,14 +1,17 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:taxi/CommonWidgets/elevated_button_widget.dart';
 import 'package:taxi/CommonWidgets/text_widget.dart';
 import 'package:taxi/Screens/Auth/SignIn/sign_in_screen.dart';
+import 'package:taxi/Screens/Booking/CancelTaxiBooking/cancel_taxi_booking.dart';
+import 'package:taxi/Screens/contact_request.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_fonts.dart';
+import 'package:taxi/Widgets/contact_sheet_widget.dart';
 import 'dart:ui' as ui;
 
 import '../main.dart';
@@ -39,40 +42,38 @@ SizedBox heightGap(double height) {
 
 hideLoader(BuildContext context) {
   try {
-    if(context.mounted) {
-      if(shouldLogout == false) {
+    if (context.mounted) {
+      if (shouldLogout == false) {
         Navigator.of(context).pop();
       }
     }
-  } catch(e){
+  } catch (e) {
     print("Error is $e");
   }
-
 }
 
-
-Widget noDataWidget(){
+Widget noDataWidget() {
   return const TextWidget(text: 'No Notification Found');
 }
+
 var shouldLogout = false;
 Future<void> logOut({BuildContext? context}) async {
   //context?.read<AuthProvider>().logOutApi(context: context);
   //navigatorKey!.currentContext?.read<AuthProvider>().logOutApi(context: navigatorKey!.currentContext!);
-  if(shouldLogout == false) {
+  if (shouldLogout == false) {
     try {
       if (context!.mounted) {
         sharedPrefs?.remove(AppStrings.token);
         sharedPrefs?.remove(AppStrings.isLogin);
         shouldLogout = true;
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            SignInScreen.routeName, (route) => false);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(SignInScreen.routeName, (route) => false);
       }
     } catch (e) {
       print("Error logout is $e");
       shouldLogout = false;
     }
   }
-
 }
 
 Widget richText(
@@ -86,11 +87,12 @@ Widget richText(
   return Text.rich(
     textAlign: TextAlign.center,
     TextSpan(
-      style: firstStyle ?? const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          fontFamily: AppFonts.inter,
-          color: AppColors.greyHint),
+      style: firstStyle ??
+          const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              fontFamily: AppFonts.inter,
+              color: AppColors.greyHint),
       children: [
         TextSpan(
           text: firstText,
@@ -98,13 +100,14 @@ Widget richText(
         const WidgetSpan(child: SizedBox(width: 3)),
         TextSpan(
           text: secondText,
-          style: secondStyle ?? TextStyle(
-            color: AppColors.primary,
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            decoration: decoration,
-            fontFamily: AppFonts.inter,
-          ),
+          style: secondStyle ??
+              TextStyle(
+                color: AppColors.primary,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                decoration: decoration,
+                fontFamily: AppFonts.inter,
+              ),
           recognizer: TapGestureRecognizer()..onTap = onTap,
         ),
       ],
@@ -160,7 +163,7 @@ void showSnackBar({
 }) {
   final snackBar = SnackBar(
     elevation: 6,
-    duration:  Duration(seconds: duration),
+    duration: Duration(seconds: duration),
     behavior: SnackBarBehavior.floating,
     content: Row(
       children: [
@@ -205,7 +208,7 @@ Future<void> bottomSheet({
         return Padding(
           padding: MediaQuery.of(c).viewInsets,
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 0),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -263,17 +266,12 @@ extension EmptySpace on num {
   SizedBox get ww => SizedBox(width: toDouble());
 }
 
-
-
-
 formattedDateTime(String date) {
   DateTime dateTime = DateTime.parse(date.toString());
   var formattedTime =
-  DateFormat('MMM d, yyyy - h:mm a').format(dateTime.toLocal());
+      DateFormat('MMM d, yyyy - h:mm a').format(dateTime.toLocal());
   return formattedTime;
 }
-
-
 
 DateTime? currentBackPressTime;
 
@@ -286,11 +284,93 @@ Future<bool> onWillPop() async {
       SnackBar(
         content: Text(
           AppLocalizations.of(navigatorKey!.currentContext!)
-              ?.pleaseClickBackAgain ??'Please click back again to exit',
+                  ?.pleaseClickBackAgain ??
+              'Please click back again to exit',
         ),
       ),
     );
     return false;
   }
   return true;
+}
+
+Future<void> showContactListSheet({
+  BuildContext? context,
+  Function(ContactRequest)? onSelect,
+}) async {
+  await showModalBottomSheet(
+    context: context!,
+    showDragHandle: true,
+    isScrollControlled: true,
+    isDismissible: true,
+    backgroundColor: Colors.white,
+    useSafeArea: true,
+    builder: (BuildContext context) {
+      return ContactSheetWidget(onSelect: onSelect);
+    },
+  );
+}
+
+Future<void> showCancelDialog(BuildContext context, String bookingId) {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          backgroundColor: AppColors.white,
+          surfaceTintColor: AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Column(
+                  children: [
+                    TextWidget(
+                      text:
+                          '${AppLocalizations.of(context)!.cancelWithIn} 3 mins ${AppLocalizations.of(context)!.otherwisePayCancellationFee}',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.black,
+                    ),
+                    heightGap(20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButtonWidget(
+                            elevation: 0,
+                            primary: AppColors.greyStatusBar,
+                            textColor: AppColors.primary,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            text: AppLocalizations.of(context)!.skip,
+                          ),
+                        ),
+                        widthGap(10),
+                        Expanded(
+                          child: ElevatedButtonWidget(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CancelTaxiBooking(
+                                    bookingId: bookingId,
+                                  ),
+                                ),
+                              );
+                            },
+                            text: AppLocalizations.of(context)!.cancelRide,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ]));
+    },
+  );
 }

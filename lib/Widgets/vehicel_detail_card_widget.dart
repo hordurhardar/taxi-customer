@@ -22,75 +22,85 @@ class VehicleDetailCardWidget extends StatelessWidget {
       required this.isSelect,
       required this.miles,
       required this.carType,
-      required this.image,required this.onTap});
+      required this.image,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     print(isSelect);
     return InkWell(
-      onTap: onTap,
-      child:
-      Stack(children: [
-
-        SizedBox(
-          width: 180,
-          child: Card(
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: isSelect ? AppColors.primary : AppColors.white,
-                ),
-                borderRadius: BorderRadius.circular(12)),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(child: SvgPic(image: image)),
-                  // Center(
-                  //     child: TextWidget(
-                  //       text: '$min ${AppLocalizations.of(context)!.min}',
-                  //       color: AppColors.greyHint,
-                  //     )),
-                  const Divider(),
-                  Row(
+        onTap: onTap,
+        child: Stack(
+          children: [
+            SizedBox(
+              width: 190,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: isSelect ? AppColors.primary : AppColors.white,
+                    ),
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Expanded(
-                          child: TextWidget(
+                      Center(
+                        child: SvgPic(image: image),
+                      ),
+                      // child: Image(
+                      //     width: 130,
+                      //     height: 60,
+                      //     fit: BoxFit.cover,
+                      //     image: NetworkImage(
+                      //       image,
+                      //     ))),
+                      // Center(
+                      //     child: TextWidget(
+                      //       text: '$min ${AppLocalizations.of(context)!.min}',
+                      //       color: AppColors.greyHint,
+                      //     )),
+                      const Divider(),
+                      Row(
+                        children: [
+                          TextWidget(
                             text: carType,
                             fontSize: 16,
                             maxLines: 1,
                             fontWeight: FontWeight.w500,
-                          )),
-                      Row(
-                        children: [
-                          TextWidget(
-                            text: '\$$miles',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
                           ),
-                          TextWidget(
-                            text: '/${AppLocalizations.of(context)!.mile}',
-                            color: AppColors.greyHint,
+                          Row(
+                            children: [
+                              TextWidget(
+                                text: 'kr$miles',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              TextWidget(
+                                text: '/${AppLocalizations.of(context)!.mile}',
+                                color: AppColors.greyHint,
+                              ),
+                            ],
                           ),
                         ],
                       ),
+                      TextWidget(
+                        text:
+                            '$seatCapacity ${AppLocalizations.of(context)!.seatsCapacity}',
+                        color: AppColors.greyHint,
+                      ),
                     ],
                   ),
-                  TextWidget(
-                    text:
-                    '$seatCapacity ${AppLocalizations.of(context)!.seatsCapacity}',
-                    color: AppColors.greyHint,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-
-        Positioned(top: 0, right: 0, child: isSelect ? const SvgPic(image: AppImages.checkYellow) : const SizedBox()),
-
-      ],)
-
-    );
+            Positioned(
+                top: 0,
+                right: 0,
+                child: isSelect
+                    ? const SvgPic(image: AppImages.checkYellow)
+                    : const SizedBox()),
+          ],
+        ));
   }
 }

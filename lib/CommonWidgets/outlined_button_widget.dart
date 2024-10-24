@@ -31,17 +31,21 @@ class OutLinedButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(onPressed:onPressed,style:OutlinedButton.styleFrom(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
-      side: const BorderSide(width: 1.0, color: AppColors.primary),
-    ), child: TextWidget(
-      text: text?.toUpperCase() ?? '',
-      textAlign: TextAlign.center,
-      color: textColor,
-      fontFamily: fontFamily,
-      letterSpacing: 2.25,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-    ),);
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+        side: const BorderSide(width: 1.0, color: AppColors.primary),
+      ),
+      child: TextWidget(
+        text: text?.toUpperCase() ?? '',
+        textAlign: TextAlign.center,
+        color: textColor,
+        fontFamily: fontFamily,
+        letterSpacing: 2.25,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+      ),
+    );
   }
 }

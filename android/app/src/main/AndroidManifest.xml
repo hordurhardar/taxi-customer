@@ -41,7 +41,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAREb6Iba4Lo6nWs2os9NUgB0_ylVSOoAI"/>
+            android:value="AIzaSyDbxbcNuOlVTolfigYexsDVfyHNrpeQ_eI"/>
 <!--
             android:value="AIzaSyDbxbcNuOlVTolfigYexsDVfyHNrpeQ_eI"/>
 -->
@@ -54,6 +54,7 @@
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
         <intent>
+        
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>

@@ -12,10 +12,37 @@ import 'package:taxi/Widgets/svg_picture.dart';
 import 'package:taxi/Widgets/toolbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class AddMoney extends StatelessWidget {
+class AddMoney extends StatefulWidget {
   static const routeName = "/addMoney_screen";
 
   const AddMoney({super.key});
+
+  @override
+  State<AddMoney> createState() => _AddMoneyState();
+}
+
+class _AddMoneyState extends State<AddMoney> {
+  late FocusNode _focusNode;
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _controller = TextEditingController();
+
+    // Request focus when the screen is loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +90,7 @@ class AddMoney extends StatelessWidget {
                                         fontWeight: FontWeight.w400,
                                       ),
                                       const TextWidget(
-                                        text: '\$ 12.000',
+                                        text: 'kr 12.000',
                                         fontSize: 15,
                                         color: AppColors.blackColor,
                                         fontWeight: FontWeight.w400,
@@ -88,10 +115,13 @@ class AddMoney extends StatelessWidget {
                             ),
                             heightGap(16),
                             TextFormFieldWidget(
+                              keyboardType: TextInputType.number,
+                              focusNode: _focusNode, // Pass the focus node here
+                              controller: _controller,
                               fillColor: AppColors.white,
                               hintText:
                                   AppLocalizations.of(context)!.enterAmount,
-                              prefixText: '\$',
+                              prefixText: 'kr',
                             ),
                             heightGap(16),
                             ElevatedButtonWidget(

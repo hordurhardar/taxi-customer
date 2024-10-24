@@ -61,7 +61,6 @@ class ChatProvider with ChangeNotifier {
   }
 
   void receivedIncomingMessageEvent() {
-
     socket?.on('receiveMessage', (data) async {
       log('receiveMessage event received: $data');
       scrollToBottom();

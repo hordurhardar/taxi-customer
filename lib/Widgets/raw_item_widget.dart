@@ -13,10 +13,10 @@ class RawItemWidget extends StatelessWidget {
       children: [
         Expanded(
             child: TextWidget(
-              text: title,
-              fontWeight: FontWeight.w500,
-              color: AppColors.greyHint,
-            )),
+          text: title,
+          fontWeight: FontWeight.w500,
+          color: AppColors.greyHint,
+        )),
         TextWidget(
           text: value,
           fontSize: 16,

@@ -8,4 +8,5 @@ class AppStrings {
   static const language = "lang";
   static const fcm = "FCM";
   static const selectedGender = "Male";
+  static const countryCode = "countryCode";
 }

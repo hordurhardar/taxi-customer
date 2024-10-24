@@ -1,4 +1,3 @@
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GetBookingListModel {
@@ -8,7 +7,8 @@ class GetBookingListModel {
   Data? data;
   int? exeTime;
 
-  GetBookingListModel({this.status, this.statusText, this.message, this.data, this.exeTime});
+  GetBookingListModel(
+      {this.status, this.statusText, this.message, this.data, this.exeTime});
 
   GetBookingListModel.fromJson(Map<String, dynamic> json) {
     status = json["status"];
@@ -23,7 +23,7 @@ class GetBookingListModel {
     _data["status"] = status;
     _data["statusText"] = statusText;
     _data["message"] = message;
-    if(data != null) {
+    if (data != null) {
       _data["data"] = data?.toJson();
     }
     _data["exeTime"] = exeTime;
@@ -37,12 +37,14 @@ class Data {
   Data({this.data});
 
   Data.fromJson(Map<String, dynamic> json) {
-    data = json["data"] == null ? null : (json["data"] as List).map((e) => BookingData.fromJson(e)).toList();
+    data = json["data"] == null
+        ? null
+        : (json["data"] as List).map((e) => BookingData.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    if(data != null) {
+    if (data != null) {
       _data["data"] = data?.map((e) => e.toJson()).toList();
     }
     return _data;
@@ -88,17 +90,58 @@ class BookingData {
   Set<Marker> markers = {};
   Set<Polyline>? polylines;
 
-  BookingData({this.pickupLocation, this.dropLocation, this.pickupAddress, this.destinationAddress, this.pickupLatitude, this.pickupLongitude, this.destinationLatitude, this.destinationLongitude, this.city, this.state, this.country, this.landmark, this.houseNo, this.vehicleNumber, this.vehicleColor, this.amount, this.status, this.rideType, this.bookForSelf, this.otp, this.id, this.customer, this.date, this.driverGender, this.createdAt, this.updatedAt, this.v, this.driver});
+  BookingData({
+    this.pickupLocation,
+    this.dropLocation,
+    this.pickupAddress,
+    this.destinationAddress,
+    this.pickupLatitude,
+    this.pickupLongitude,
+    this.destinationLatitude,
+    this.destinationLongitude,
+    this.city,
+    this.state,
+    this.country,
+    this.landmark,
+    this.houseNo,
+    this.vehicleNumber,
+    this.vehicleColor,
+    this.amount,
+    this.status,
+    this.rideType,
+    this.bookForSelf,
+    this.otp,
+    this.id,
+    this.customer,
+    this.date,
+    this.driverGender,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+    this.driver,
+  });
 
   BookingData.fromJson(Map<String, dynamic> json) {
-    pickupLocation = json["pickupLocation"] == null ? null : PickupLocation.fromJson(json["pickupLocation"]);
-    dropLocation = json["dropLocation"] == null ? null : DropLocation.fromJson(json["dropLocation"]);
+    pickupLocation = json["pickupLocation"] == null
+        ? null
+        : PickupLocation.fromJson(json["pickupLocation"]);
+    dropLocation = json["dropLocation"] == null
+        ? null
+        : DropLocation.fromJson(json["dropLocation"]);
     pickupAddress = json["pickupAddress"];
     destinationAddress = json["destinationAddress"];
-    pickupLatitude = json["pickupLatitude"];
-    pickupLongitude = json["pickupLongitude"];
-    destinationLatitude = json["destinationLatitude"];
-    destinationLongitude = json["destinationLongitude"];
+    pickupLatitude = json["pickupLatitude"] is int
+        ? json['pickupLatitude'].toDouble()
+        : json['pickupLatitude'];
+    pickupLongitude = json["pickupLongitude"] is int
+        ? json['pickupLongitude'].toDouble()
+        : json['pickupLongitude'];
+    destinationLatitude = json["destinationLatitude"] is int
+        ? json['destinationLatitude'].toDouble()
+        : json['destinationLatitude'];
+    destinationLongitude = json["destinationLongitude"] is int
+        ? json['destinationLongitude'].toDouble()
+        : json['destinationLongitude'];
     city = json["city"];
     state = json["state"];
     country = json["country"];
@@ -109,17 +152,20 @@ class BookingData {
     amount = json["amount"];
     status = json["status"];
     rideType = json["rideType"];
-    carType = json["carType"] == null ? "" :json["carType"].toString();
-    perMileAmount = json["perMileAmount"] == null ? "0" :json["perMileAmount"].toString();
+    carType = json["carType"] == null ? "" : json["carType"].toString();
+    perMileAmount =
+        json["perMileAmount"] == null ? "0" : json["perMileAmount"].toString();
     seatCapacity = json["seatCapacity"].toString();
     bookForSelf = json["book_for_self"];
     otp = json["otp"];
     id = json["_id"];
-    customer = json["customer"] == null ? null : Customer.fromJson(json["customer"]);
+    customer =
+        json["customer"] == null ? null : Customer.fromJson(json["customer"]);
     date = json["date"];
     driverGender = json["driver_gender"];
     driverRating = json["driver_rating"];
-    totalDistance = json["totalDistance"] == null ? "0" :json["totalDistance"].toString();
+    totalDistance =
+        json["totalDistance"] == null ? "0" : json["totalDistance"].toString();
     startRideTime = json["start_ride_time"];
     endRideTime = json["end_ride_time"];
     createdAt = json["created_at"];
@@ -130,10 +176,10 @@ class BookingData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    if(pickupLocation != null) {
+    if (pickupLocation != null) {
       _data["pickupLocation"] = pickupLocation?.toJson();
     }
-    if(dropLocation != null) {
+    if (dropLocation != null) {
       _data["dropLocation"] = dropLocation?.toJson();
     }
     _data["pickupAddress"] = pickupAddress;
@@ -155,7 +201,7 @@ class BookingData {
     _data["book_for_self"] = bookForSelf;
     _data["otp"] = otp;
     _data["_id"] = id;
-    if(customer != null) {
+    if (customer != null) {
       _data["customer"] = customer?.toJson();
     }
     _data["date"] = date;
@@ -167,7 +213,7 @@ class BookingData {
     _data["created_at"] = createdAt;
     _data["updated_at"] = updatedAt;
     _data["__v"] = v;
-    if(driver != null) {
+    if (driver != null) {
       _data["driver"] = driver?.toJson();
     }
     return _data;
@@ -224,10 +270,60 @@ class Driver {
   String? userName;
   int? cityId;
 
-  Driver({this.userLocation, this.gender, this.age, this.isActive, this.isDeleted, this.otp, this.creditLimit, this.language, this.type, this.profilePic, this.description, this.isProfileCompleted, this.isNotification, this.isApprove, this.isSubscription, this.experience, this.loginType, this.deviceType, this.country, this.endDate, this.voipToken, this.isCar, this.latitude, this.longitude, this.deviceToken, this.socialId, this.myReferralCode, this.referByCode, this.accountId, this.isVerify, this.isOnline, this.bankAccountDocument, this.drivingLicence, this.drivingLicenceBack, this.govermentId, this.id, this.userId, this.email, this.password, this.name, this.createdAt, this.updatedAt, this.v, this.countryCode, this.mobileNumber, this.profileImage, this.userName, this.cityId});
+  Driver(
+      {this.userLocation,
+      this.gender,
+      this.age,
+      this.isActive,
+      this.isDeleted,
+      this.otp,
+      this.creditLimit,
+      this.language,
+      this.type,
+      this.profilePic,
+      this.description,
+      this.isProfileCompleted,
+      this.isNotification,
+      this.isApprove,
+      this.isSubscription,
+      this.experience,
+      this.loginType,
+      this.deviceType,
+      this.country,
+      this.endDate,
+      this.voipToken,
+      this.isCar,
+      this.latitude,
+      this.longitude,
+      this.deviceToken,
+      this.socialId,
+      this.myReferralCode,
+      this.referByCode,
+      this.accountId,
+      this.isVerify,
+      this.isOnline,
+      this.bankAccountDocument,
+      this.drivingLicence,
+      this.drivingLicenceBack,
+      this.govermentId,
+      this.id,
+      this.userId,
+      this.email,
+      this.password,
+      this.name,
+      this.createdAt,
+      this.updatedAt,
+      this.v,
+      this.countryCode,
+      this.mobileNumber,
+      this.profileImage,
+      this.userName,
+      this.cityId});
 
   Driver.fromJson(Map<String, dynamic> json) {
-    userLocation = json["user_location"] == null ? null : UserLocation1.fromJson(json["user_location"]);
+    userLocation = json["user_location"] == null
+        ? null
+        : UserLocation1.fromJson(json["user_location"]);
     gender = json["gender"];
     age = json["age"];
     isActive = json["is_active"];
@@ -279,7 +375,7 @@ class Driver {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    if(userLocation != null) {
+    if (userLocation != null) {
       _data["user_location"] = userLocation?.toJson();
     }
     _data["gender"] = gender;
@@ -341,13 +437,15 @@ class UserLocation1 {
 
   UserLocation1.fromJson(Map<String, dynamic> json) {
     type = json["type"];
-    coordinates = json["coordinates"] == null ? null : List<double>.from(json["coordinates"]);
+    coordinates = json["coordinates"] == null
+        ? null
+        : List<double>.from(json["coordinates"]);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["type"] = type;
-    if(coordinates != null) {
+    if (coordinates != null) {
       _data["coordinates"] = coordinates;
     }
     return _data;
@@ -404,10 +502,60 @@ class Customer {
   String? address;
   String? userName;
 
-  Customer({this.userLocation, this.gender, this.age, this.isActive, this.isDeleted, this.otp, this.creditLimit, this.language, this.type, this.profilePic, this.description, this.isProfileCompleted, this.isNotification, this.isApprove, this.isSubscription, this.experience, this.loginType, this.deviceType, this.country, this.endDate, this.voipToken, this.isCar, this.latitude, this.longitude, this.deviceToken, this.socialId, this.myReferralCode, this.referByCode, this.accountId, this.isVerify, this.isOnline, this.bankAccountDocument, this.drivingLicence, this.drivingLicenceBack, this.govermentId, this.id, this.profileImage, this.userId, this.email, this.password, this.name, this.createdAt, this.updatedAt, this.v, this.countryCode, this.mobileNumber, this.address, this.userName});
+  Customer(
+      {this.userLocation,
+      this.gender,
+      this.age,
+      this.isActive,
+      this.isDeleted,
+      this.otp,
+      this.creditLimit,
+      this.language,
+      this.type,
+      this.profilePic,
+      this.description,
+      this.isProfileCompleted,
+      this.isNotification,
+      this.isApprove,
+      this.isSubscription,
+      this.experience,
+      this.loginType,
+      this.deviceType,
+      this.country,
+      this.endDate,
+      this.voipToken,
+      this.isCar,
+      this.latitude,
+      this.longitude,
+      this.deviceToken,
+      this.socialId,
+      this.myReferralCode,
+      this.referByCode,
+      this.accountId,
+      this.isVerify,
+      this.isOnline,
+      this.bankAccountDocument,
+      this.drivingLicence,
+      this.drivingLicenceBack,
+      this.govermentId,
+      this.id,
+      this.profileImage,
+      this.userId,
+      this.email,
+      this.password,
+      this.name,
+      this.createdAt,
+      this.updatedAt,
+      this.v,
+      this.countryCode,
+      this.mobileNumber,
+      this.address,
+      this.userName});
 
   Customer.fromJson(Map<String, dynamic> json) {
-    userLocation = json["user_location"] == null ? null : UserLocation.fromJson(json["user_location"]);
+    userLocation = json["user_location"] == null
+        ? null
+        : UserLocation.fromJson(json["user_location"]);
     gender = json["gender"];
     age = json["age"];
     isActive = json["is_active"];
@@ -459,7 +607,7 @@ class Customer {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    if(userLocation != null) {
+    if (userLocation != null) {
       _data["user_location"] = userLocation?.toJson();
     }
     _data["gender"] = gender;
@@ -521,13 +669,17 @@ class UserLocation {
 
   UserLocation.fromJson(Map<String, dynamic> json) {
     type = json["type"];
-    coordinates = json["coordinates"] == null ? null : List<double>.from(json["coordinates"]);
+    coordinates = json["coordinates"] == null
+        ? null
+        : (json['coordinates'] as List)
+            .map<double>((e) => double.parse(e.toString()))
+            .toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["type"] = type;
-    if(coordinates != null) {
+    if (coordinates != null) {
       _data["coordinates"] = coordinates;
     }
     return _data;
@@ -542,13 +694,17 @@ class DropLocation {
 
   DropLocation.fromJson(Map<String, dynamic> json) {
     type = json["type"];
-    coordinates = json["coordinates"] == null ? null : List<double>.from(json["coordinates"]);
+    coordinates = json["coordinates"] == null
+        ? null
+        : (json['coordinates'] as List)
+            .map<double>((e) => double.parse(e.toString()))
+            .toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["type"] = type;
-    if(coordinates != null) {
+    if (coordinates != null) {
       _data["coordinates"] = coordinates;
     }
     return _data;
@@ -563,13 +719,17 @@ class PickupLocation {
 
   PickupLocation.fromJson(Map<String, dynamic> json) {
     type = json["type"];
-    coordinates = json["coordinates"] == null ? null : List<double>.from(json["coordinates"]);
+    coordinates = json["coordinates"] == null
+        ? null
+        : (json['coordinates'] as List)
+            .map<double>((e) => double.parse(e.toString()))
+            .toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["type"] = type;
-    if(coordinates != null) {
+    if (coordinates != null) {
       _data["coordinates"] = coordinates;
     }
     return _data;

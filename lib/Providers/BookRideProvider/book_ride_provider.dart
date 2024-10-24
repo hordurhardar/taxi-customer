@@ -46,6 +46,7 @@ List<MessageModel> messageList = [];
 
 class BookRideProvider with ChangeNotifier {
   bool isLoading = false;
+  String driverId = '';
   List<PromoCodeData>? promoList;
   PolylinePoints polylinePoints = PolylinePoints();
   Map<PolylineId, Polyline> polylines = {};
@@ -74,6 +75,11 @@ class BookRideProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void changeLoading(bool newValue) {
+    isLoading = newValue;
+    notifyListeners();
+  }
+
   Future<void> selectGender({required String gender}) async {
     this.gender = gender;
     sharedPrefs?.setString(AppStrings.selectedGender, gender);
@@ -85,29 +91,40 @@ class BookRideProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  List<ListDocs> getRidesForDate(DateTime date) {
+    final formattedDate = "${date.year}-${date.month}-${date.day}";
+    return docs.where((ride) {
+      final rideDate = DateTime.parse(ride.date ?? "");
+      return rideDate.year == date.year &&
+          rideDate.month == date.month &&
+          rideDate.day == date.day;
+    }).toList();
+  }
+
   Future<void> getPreBookRideListApi({
     required BuildContext context,
   }) async {
-    isLoading = true;
+    changeLoading(true);
     final data = await RemoteService().callGetApi(
       context: context,
       url:
           '$tPreBookList?lat=${context.read<HomeProvider>().currentPosition?.latitude}&long=${context.read<HomeProvider>().currentPosition?.longitude}',
     );
     if (data == null) {
-      isLoading = false;
+      changeLoading(false);
+
       return;
     }
     final prebookRideListResponse =
         PreBookRideListModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (prebookRideListResponse.status == 200) {
-        isLoading = false;
+        changeLoading(false);
 
         docs = prebookRideListResponse.data?.list?.docs ?? [];
-        // print(preBookRideList);
+        print(prebookRideListResponse);
       } else {
-        isLoading = false;
+        changeLoading(false);
         showSnackBar(
             context: context,
             message: prebookRideListResponse.statusText,
@@ -124,6 +141,7 @@ class BookRideProvider with ChangeNotifier {
         color: Colors.cyan,
         width: 7,
         points: polylineCoordinates);
+    log("Poliline points ==> ${polylineCoordinates.length}");
     polylines[id] = polyline;
     notifyListeners();
   }
@@ -137,29 +155,42 @@ class BookRideProvider with ChangeNotifier {
     polylinePoints = PolylinePoints();
     polylines.clear();
     polylineCoordinates = [];
-    await polylinePoints
-        .getRouteBetweenCoordinates(
-      GOOGLE_API_KEY,
-      pickUpLatLng, //Starting LATLANG
-      dropLatLng, //End LATLANG
-      travelMode: TravelMode.driving,
-    )
-        .then((value) {
-      for (var point in value.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      }
-    }).then((value) {
-      addPolyLine();
-      if (updateCamera) {
-        moveCamera(
+
+    try {
+      log("result======>");
+      final result = await polylinePoints.getRouteBetweenCoordinates(
+        googleApiKey: GOOGLE_API_KEY,
+        request: PolylineRequest(
+          origin: pickUpLatLng,
+          destination: dropLatLng,
+          mode: TravelMode.driving,
+        ),
+      );
+      log("polylineCoordinates =====>${result.points.length}");
+      if (result.points.isNotEmpty) {
+        for (var point in result.points) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+
+          log("polylineCoordinates =====>${point.latitude}");
+        }
+        addPolyLine();
+        if (updateCamera) {
+          moveCamera(
             context,
             LatLng(
-                context.read<HomeProvider>().currentPosition?.latitude ?? 0.0,
-                context.read<HomeProvider>().currentPosition?.longitude ??
-                    0.0));
+              context.read<HomeProvider>().currentPosition?.latitude ?? 0.0,
+              context.read<HomeProvider>().currentPosition?.longitude ?? 0.0,
+            ),
+          );
+        }
+      } else {
+        print('No route found');
       }
-    });
-    notifyListeners();
+    } catch (e) {
+      print('Error fetching route: $e');
+    } finally {
+      notifyListeners();
+    }
   }
 
   Future<void> moveCamera(BuildContext context, LatLng pickUpLatLng) async {
@@ -200,7 +231,7 @@ class BookRideProvider with ChangeNotifier {
         draggable: true,
         onDragEnd: (value) {},
         icon: BitmapDescriptor.fromBytes(
-            await getBytesFromAsset(AppImages.locationPinIcon, 50)),
+            await getBytesFromAsset(AppImages.carYellowImage, 50)),
       ),
     );
     notifyListeners();
@@ -228,6 +259,8 @@ class BookRideProvider with ChangeNotifier {
     if (context.mounted) {
       if (getPromoResponse.status == 200) {
         promoList = getPromoResponse.data?.data ?? [];
+
+        log("promocard ========>${data.body}");
         isLoading = false;
       } else {
         isLoading = false;
@@ -245,7 +278,7 @@ class BookRideProvider with ChangeNotifier {
       required double latitude,
       required double longitude}) async {
     isLoading = true;
-
+    print('the current latitude $latitude and longitude $longitude');
     final data = await RemoteService().callGetApi(
       context: context,
       url:
@@ -257,6 +290,7 @@ class BookRideProvider with ChangeNotifier {
     }
     final getVehicleListResponse =
         GetVehicleListModel.fromJson(jsonDecode(data.body));
+    log('vewhicle list resp => ${getVehicleListResponse.toJson()}');
     if (context.mounted) {
       if (getVehicleListResponse.status == 200) {
         isLoading = false;
@@ -315,13 +349,11 @@ class BookRideProvider with ChangeNotifier {
                   LatLng(element.latitude ?? 0.0, element.longitude ?? 0.0),
               draggable: true,
               onDragEnd: (value) {},
-              icon: BitmapDescriptor.fromBytes(
-                  await getBytesFromAsset(AppImages.carYellowImage, 50)),
             ),
           );
         });
 
-        print(allDriverList);
+        print("allDriverList==========>${allDriverList!.length}");
       } else {
         isLoading = false;
         showSnackBar(
@@ -651,11 +683,15 @@ class BookRideProvider with ChangeNotifier {
     var perMileAmount;
     String? carType;
     int? seatCapacity;
+
     for (var a in vehicleList) {
       if (a.isSelected) {
         carType = a.vehicleType;
         seatCapacity = a.seatCapacity;
         perMileAmount = a.vehiclePrice;
+
+        log("selectedvehicales======>${a.vehicleType}");
+        log("selectedvehicales======>${a.seatCapacity}");
       }
     }
 
@@ -678,7 +714,7 @@ class BookRideProvider with ChangeNotifier {
       "seatCapacity": seatCapacity,
       "discountCoupon": couponId,
     };
-
+    log("data ==========> ${body}");
     final data = await RemoteService()
         .callPostApi(context: context, url: tBookRide, jsonData: body);
 
@@ -687,17 +723,21 @@ class BookRideProvider with ChangeNotifier {
       return;
     }
 
-    log("Book Response = ${data.body}");
+    log("Booked Response = ${data.body}");
     final bookResponse = CommonModel.fromJson(jsonDecode(data.body));
 
     if (context.mounted) {
       if (bookResponse.status == 200) {
         hideLoader(context);
         showSnackBar(
-            context: context, message: bookResponse.message, isSuccess: true);
+          context: context,
+          message: bookResponse.message,
+          isSuccess: true,
+        );
 
         if (rideType == "Now") {
-          Navigator.of(context).pushNamed(SearchRideScreen.routeName);
+          Navigator.of(context).pushNamed(SearchRideScreen.routeName,
+              arguments: {'booking_id': 'bookResponse.data'});
         } else {
           showSnackBar(
               context: context,
@@ -775,14 +815,15 @@ class BookRideProvider with ChangeNotifier {
                   ?.data
                   ?.id ??
               '');
+      log("getalldriversapi========>${receiveStatusUpdateModel?.data?.id}");
       if (callDriverDetailsApi) {
         await context.read<DriverProvider>().getDriverDetailApi(
             context: context,
             driverId: context
-                    .read<BookRideProvider>()
-                    .receiveStatusUpdateModel
-                    ?.data
-                    ?.driver
+                    .read<BookRideProvider>().driverId
+                    // .receiveStatusUpdateModel
+                    // ?.data
+                    // ?.driver
                     .toString() ??
                 '');
         //await context.read<BookRideProvider>().getBookingDetails(context: context, id: context.read<BookRideProvider>().receiveStatusUpdateModel?.data?.id ?? '');
@@ -813,6 +854,8 @@ class BookRideProvider with ChangeNotifier {
       IO.OptionBuilder().setTransports(['websocket']).setQuery(
           {'token': '${sharedPrefs?.getString(AppStrings.token)}'}).build(),
     );
+
+    log("socketdata==========>${socketUrl.length}");
     socket?.connect();
 
     socket?.onConnect((data) {
@@ -942,16 +985,14 @@ class BookRideProvider with ChangeNotifier {
       );
       notifyListeners();
     } else {
-      markers.add(
-        Marker(
-          markerId: MarkerId(id),
-          position: latLngDriver,
-          draggable: true,
-          onDragEnd: (value) {},
-          icon: BitmapDescriptor.fromBytes(
-              await getBytesFromAsset(AppImages.carYellowImage, 50)),
-        ),
-      );
+      markers.add(Marker(
+        markerId: MarkerId(id),
+        position: latLngDriver,
+        draggable: true,
+        onDragEnd: (value) {},
+        icon: BitmapDescriptor.fromBytes(
+            await getBytesFromAsset(AppImages.locationPinIcon, 50)),
+      ));
       notifyListeners();
     }
   }
@@ -995,6 +1036,7 @@ class BookRideProvider with ChangeNotifier {
 
     final bookingListResponse =
         GetBookingDetails.fromJson(jsonDecode(data.body));
+    log("bookinglistResponse=======>${bookingListResponse.data}");
     if (context.mounted) {
       if (bookingListResponse.status == 200) {
         bookingList = bookingListResponse.data?.data ?? [];

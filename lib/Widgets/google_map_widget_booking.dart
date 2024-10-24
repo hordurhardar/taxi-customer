@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +65,6 @@ class _GoogleMapWidgetBookingState extends State<GoogleMapWidgetBooking> {
             width: widget.width,
             height: widget.height,
             child: GoogleMap(
-
               // myLocationButtonEnabled: true,
               // myLocationEnabled: true,
 
@@ -74,9 +72,9 @@ class _GoogleMapWidgetBookingState extends State<GoogleMapWidgetBooking> {
               // scrollGesturesEnabled: false,
               // tiltGesturesEnabled: false,
               // rotateGesturesEnabled: false,
-               zoomControlsEnabled: true,
+              zoomControlsEnabled: true,
 
-              mapType: MapType.normal,
+              // mapType: MapType.normal,
               initialCameraPosition: widget.position ??
                   const CameraPosition(
                     target: LatLng(26.45, 75.80),
@@ -85,8 +83,10 @@ class _GoogleMapWidgetBookingState extends State<GoogleMapWidgetBooking> {
               markers: widget.markers ?? {},
               polylines: widget.polylines ?? {},
               onCameraMove: (CameraPosition cameraPosition) async {
-                await context.read<MapProvider>().onCameraMove(cameraPosition: cameraPosition);
-                if(widget.onCameraMove != null) {
+                await context
+                    .read<MapProvider>()
+                    .onCameraMove(cameraPosition: cameraPosition);
+                if (widget.onCameraMove != null) {
                   widget.onCameraMove!(value.controller.text);
                 }
               },
@@ -94,7 +94,9 @@ class _GoogleMapWidgetBookingState extends State<GoogleMapWidgetBooking> {
                 await context.read<MapProvider>().onCameraIdle();
               },
               onMapCreated: (GoogleMapController controller) async {
-                await context.read<MapProvider>().initController(controller, context);
+                await context
+                    .read<MapProvider>()
+                    .initController(controller, context);
               },
             ),
           ),

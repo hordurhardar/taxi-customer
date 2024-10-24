@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taxi/CommonWidgets/custom_scaffold.dart';
 import 'package:taxi/CommonWidgets/text_widget.dart';
 import 'package:taxi/Screens/Home/ActiveRide/active_at_destination_screen.dart';
+import 'package:taxi/Screens/Home/Driver/driver_details_screen.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/helper_methods.dart';
 import 'package:taxi/Widgets/google_map_widget.dart';
@@ -97,18 +98,18 @@ class ActiveRideLiveLocation extends StatelessWidget {
                                         children: [
                                           InkWell(
                                             onTap: () {
-                                              // Navigator.of(context).pushNamed(
-                                              //     DriverDetailsScreen
-                                              //         .routeName);
+                                              Navigator.of(context).pushNamed(
+                                                DriverDetailsScreen.routeName,
+                                              );
                                             },
                                             child: Container(
                                               width: 42,
                                               height: 42,
                                               decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                  color: AppColors.primary),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                color: AppColors.primary,
+                                              ),
                                             ),
                                           ),
                                           widthGap(10),
@@ -139,7 +140,7 @@ class ActiveRideLiveLocation extends StatelessWidget {
                                               Row(
                                                 children: [
                                                   const TextWidget(
-                                                    text: '\$ 1.25/',
+                                                    text: 'kr 1.25/',
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w500,
                                                     color: AppColors.black,

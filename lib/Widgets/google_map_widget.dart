@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:taxi/Providers/HomeProvider/home_provider.dart';
@@ -70,7 +71,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
               // scrollGesturesEnabled: false,
               // tiltGesturesEnabled: false,
               // rotateGesturesEnabled: false,
-               zoomControlsEnabled: true,
+              zoomControlsEnabled: true,
 
               mapType: MapType.normal,
               initialCameraPosition: value.cameraPosition ??
@@ -81,17 +82,22 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
               markers: widget.markers ?? {},
               polylines: widget.polylines ?? {},
               onCameraMove: (CameraPosition cameraPosition) async {
-                await context.read<MapProvider>().onCameraMove(cameraPosition: cameraPosition);
-                if(widget.onCameraMove != null) {
+                await context
+                    .read<MapProvider>()
+                    .onCameraMove(cameraPosition: cameraPosition);
+                if (widget.onCameraMove != null) {
                   widget.onCameraMove!(value.controller.text);
                 }
-                context.read<HomeProvider>().currentPosition   = cameraPosition.target;
+                context.read<HomeProvider>().currentPosition =
+                    cameraPosition.target;
               },
               onCameraIdle: () async {
                 await context.read<MapProvider>().onCameraIdle();
               },
               onMapCreated: (GoogleMapController controller) async {
-                await context.read<MapProvider>().initController(controller, context);
+                await context
+                    .read<MapProvider>()
+                    .initController(controller, context);
               },
             ),
           ),

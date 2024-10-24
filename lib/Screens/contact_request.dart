@@ -4,10 +4,21 @@ class ContactRequest {
   String? city;
   String? postalCode;
   String? country;
+  String? relation;
   bool isSelected = false;
 
-  ContactRequest(
-      {this.name, this.phone, this.city, this.postalCode, this.country,});
+  ContactRequest({
+    this.name,
+    this.phone,
+    this.city,
+    this.postalCode,
+    this.country,
+    this.relation,
+  });
+
+  set setRelation(String newRelation) => relation = newRelation;
+
+  set setSelected(bool newValue) => isSelected = newValue;
 
   ContactRequest.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -15,6 +26,7 @@ class ContactRequest {
     city = json['city'];
     postalCode = json['postalCode'];
     country = json['country'];
+    relation = json["relation"];
   }
 
   Map<String, dynamic> toJson() {
@@ -24,6 +36,7 @@ class ContactRequest {
     data['city'] = city;
     data['postalCode'] = postalCode;
     data['country'] = country;
+    data['relation'] = relation;
     return data;
   }
 }

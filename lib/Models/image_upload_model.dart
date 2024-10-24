@@ -1,4 +1,3 @@
-
 class ImageUploadModel {
   int? status;
   String? statusText;
@@ -6,7 +5,8 @@ class ImageUploadModel {
   Data? data;
   int? exeTime;
 
-  ImageUploadModel({this.status, this.statusText, this.message, this.data, this.exeTime});
+  ImageUploadModel(
+      {this.status, this.statusText, this.message, this.data, this.exeTime});
 
   ImageUploadModel.fromJson(Map<String, dynamic> json) {
     status = json["status"];
@@ -21,7 +21,7 @@ class ImageUploadModel {
     _data["status"] = status;
     _data["statusText"] = statusText;
     _data["message"] = message;
-    if(data != null) {
+    if (data != null) {
       _data["data"] = data?.toJson();
     }
     _data["exeTime"] = exeTime;

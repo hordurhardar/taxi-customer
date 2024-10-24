@@ -21,10 +21,10 @@ class CustomScaffold extends StatefulWidget {
       this.appBar,
       this.bottomSheet,
       this.floatingActionButton,
-      this.resizeToAvoidBottomInset=false,
+      this.resizeToAvoidBottomInset = false,
       this.bottomNavigationBar,
       this.floatingActionButtonLocation,
-        this.extendBodyBehindAppBar = false,
+      this.extendBodyBehindAppBar = false,
       this.statusBarColor = AppColors.white,
       this.statusBarIconBrightness = Brightness.light,
       this.backgroundColor = AppColors.white});
@@ -37,15 +37,16 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset :widget.resizeToAvoidBottomInset,
+      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
       bottomSheet: widget.bottomSheet,
       backgroundColor: widget.backgroundColor,
-      appBar: widget.appBar ?? AppBar(
-        toolbarHeight: 0,
-        backgroundColor: widget.statusBarColor,
-        elevation: 0,
-      ),
+      appBar: widget.appBar ??
+          AppBar(
+            toolbarHeight: 0,
+            backgroundColor: widget.statusBarColor,
+            elevation: 0,
+          ),
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,

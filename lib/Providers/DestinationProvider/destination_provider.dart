@@ -15,7 +15,7 @@ import 'package:taxi/Remote/remote_service.dart';
 import 'package:taxi/Utils/helper_methods.dart';
 import 'package:taxi/main.dart';
 
-class DestinationProvider with ChangeNotifier{
+class DestinationProvider with ChangeNotifier {
   bool isLoading = false;
   List<SavedAddressData> savedAddressList = [];
   final yourLocationController = TextEditingController();
@@ -39,41 +39,36 @@ class DestinationProvider with ChangeNotifier{
 
   set setFromDestinationType(FromDestinationType? value) {
     _fromDestinationType = value;
-
   }
-
 
   set setSelectedPredictionLatLong(LatLng? value) {
     selectedPredictionLatLong = value;
   }
 
-
-  Future<void> clearDropController()async {
+  Future<void> clearDropController() async {
     dropLocationController.clear();
     predictionsList?.clear();
     notifyListeners();
   }
 
-
   Future<void> disableDropFieldCall({required bool value}) async {
     disableDropField = value;
     notifyListeners();
   }
-  Future<void> setDestinationYourLocationController() async {
 
-    if(context.mounted) {
-      yourLocationController.text = context
-          .read<MapProvider>()
-          .controller
-          .text;
+  Future<void> setDestinationYourLocationController() async {
+    if (context.mounted) {
+      yourLocationController.text = context.read<MapProvider>().controller.text;
     }
   }
+
   Future<void> setDropLocationController({required String text}) async {
     dropLocationController.text = text;
     notifyListeners();
   }
 
-  Future<void> selectPredictionLocation({required Predictions prediction}) async {
+  Future<void> selectPredictionLocation(
+      {required Predictions prediction}) async {
     selectedPrediction = prediction;
     setDropLocationController(text: selectedPrediction?.description ?? '');
     notifyListeners();
@@ -84,7 +79,8 @@ class DestinationProvider with ChangeNotifier{
   }) async {
     isLoading = true;
 
-    final data = await RemoteService().callGetApi( context: context,
+    final data = await RemoteService().callGetApi(
+      context: context,
       url: tSavedAddress,
     );
     if (data == null) {
@@ -92,10 +88,10 @@ class DestinationProvider with ChangeNotifier{
       return;
     }
     final savedAddressResponse =
-    GetSavedAddressModel.fromJson(jsonDecode(data.body));
+        GetSavedAddressModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (savedAddressResponse.status == 200) {
-        savedAddressList = savedAddressResponse.data?.data  ?? [];
+        savedAddressList = savedAddressResponse.data?.data ?? [];
         isLoading = false;
       } else {
         isLoading = false;
@@ -120,16 +116,18 @@ class DestinationProvider with ChangeNotifier{
   }) async {
     isLoading = true;
     print("Langguage Code ${languageSelected}");
-    final data = await RemoteService().callGetApi( context: context,
+    final data = await RemoteService().callGetApi(
+      context: context,
       forLocation: true,
-      url: 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$GOOGLE_API_KEY&language=is',
+      url:
+          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$GOOGLE_API_KEY&language=is',
     );
     if (data == null) {
       isLoading = false;
       return;
     }
     final getDropPlacesResponse =
-    GetDropPlacesModel.fromJson(jsonDecode(data.body));
+        GetDropPlacesModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (getDropPlacesResponse.status == 'OK') {
         predictionsList = getDropPlacesResponse.predictions ?? [];
@@ -137,14 +135,11 @@ class DestinationProvider with ChangeNotifier{
       } else {
         isLoading = false;
         showSnackBar(
-            context: context,
-            message: 'Something wrong',
-            isSuccess: false);
+            context: context, message: 'Something wrong', isSuccess: false);
       }
     }
     notifyListeners();
   }
-
 
   Future<void> getPlaceFromLatLngApi({
     required BuildContext context,
@@ -153,9 +148,11 @@ class DestinationProvider with ChangeNotifier{
   }) async {
     isLoading = true;
 
-    final data = await RemoteService().callGetApi( context: context,
+    final data = await RemoteService().callGetApi(
+      context: context,
       forLocation: true,
-      url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=$GOOGLE_API_KEY',
+      url:
+          'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=$GOOGLE_API_KEY',
     );
     if (data == null) {
       isLoading = false;
@@ -163,17 +160,17 @@ class DestinationProvider with ChangeNotifier{
     }
     log("Body ${data.body}");
     final getDropPlacesResponse =
-    GetLatLongFromPlaceIdModel.fromJson(jsonDecode(data.body));
+        GetLatLongFromPlaceIdModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (getDropPlacesResponse.status == 'OK') {
-        selectedPredictionLatLong = LatLng(getDropPlacesResponse.result?.geometry?.location?.lat ?? 0.0, getDropPlacesResponse.result?.geometry?.location?.lng ?? 0.0);
+        selectedPredictionLatLong = LatLng(
+            getDropPlacesResponse.result?.geometry?.location?.lat ?? 0.0,
+            getDropPlacesResponse.result?.geometry?.location?.lng ?? 0.0);
         isLoading = false;
       } else {
         isLoading = false;
         showSnackBar(
-            context: context,
-            message: 'Something wrong',
-            isSuccess: false);
+            context: context, message: 'Something wrong', isSuccess: false);
       }
     }
     notifyListeners();
@@ -185,31 +182,32 @@ class DestinationProvider with ChangeNotifier{
   }) async {
     isLoading = true;
 
-    final data = await RemoteService().callGetApi( context: context,
+    final data = await RemoteService().callGetApi(
+      context: context,
       forLocation: true,
-      url: 'https://maps.googleapis.com/maps/api/place/details/json?placeid=$placeID&key=$GOOGLE_API_KEY',
+      url:
+          'https://maps.googleapis.com/maps/api/place/details/json?placeid=$placeID&key=$GOOGLE_API_KEY',
     );
     if (data == null) {
       isLoading = false;
       return;
     }
     final getDropPlacesResponse =
-    GetLatLongFromPlaceIdModel.fromJson(jsonDecode(data.body));
+        GetLatLongFromPlaceIdModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (getDropPlacesResponse.status == 'OK') {
-        selectedPredictionLatLong = LatLng(getDropPlacesResponse.result?.geometry?.location?.lat ?? 0.0, getDropPlacesResponse.result?.geometry?.location?.lng ?? 0.0);
+        selectedPredictionLatLong = LatLng(
+            getDropPlacesResponse.result?.geometry?.location?.lat ?? 0.0,
+            getDropPlacesResponse.result?.geometry?.location?.lng ?? 0.0);
         isLoading = false;
       } else {
         isLoading = false;
         showSnackBar(
-            context: context,
-            message: 'Something wrong',
-            isSuccess: false);
+            context: context, message: 'Something wrong', isSuccess: false);
       }
     }
     notifyListeners();
   }
-
 
   Future<void> deleteAddressApi({
     required BuildContext context,

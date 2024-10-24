@@ -71,7 +71,7 @@ class ReceiptScreen extends StatelessWidget {
                         RawItemWidget(
                             title: AppLocalizations.of(context)!.costPerMile,
                             value:
-                                '\$ ${bookRideValue.bookingList.first.perMileAmount}'),
+                                'kr ${bookRideValue.bookingList.first.perMileAmount}'),
                         // RawItemWidget(
                         //     title: AppLocalizations.of(context)!.estimatedMile,
                         //     value:
@@ -82,14 +82,15 @@ class ReceiptScreen extends StatelessWidget {
                         RawItemWidget(
                             title: AppLocalizations.of(context)!.total,
                             value:
-                                '\$ ${bookRideValue.bookingList.first.totalAmount}'),
+                                'kr ${bookRideValue.bookingList.first.totalAmount}'),
                         const Divider(height: 40),
                         RawItemWidget(
                             title: AppLocalizations.of(context)!.name,
                             value: profileValue.profileData?.name ?? ''),
                         RawItemWidget(
                             title: AppLocalizations.of(context)!.phoneNumber,
-                            value: profileValue.profileData?.mobileNumber ?? ''),
+                            value:
+                                profileValue.profileData?.mobileNumber ?? ''),
                         RawItemWidget(
                             title: AppLocalizations.of(context)!.transactionId,
                             value: '${bookRideValue.bookingList.first.id}'),
@@ -101,7 +102,7 @@ class ReceiptScreen extends StatelessWidget {
               CommonFooterWidget(
                   cartItem: ElevatedButtonWidget(
                 onPressed: () async {
-                   Navigator.of(context).pushNamed(RateDriverScreen.routeName);
+                  Navigator.of(context).pushNamed(RateDriverScreen.routeName);
 
                   if (Platform.isAndroid) {
                     var status = await Permission.storage.status;
@@ -131,31 +132,46 @@ class ReceiptScreen extends StatelessWidget {
                                         value: "${value.driverData?.name}"),
                                     rowItem(
                                         title: "Car Number",
-                                        value: "${value.driverData?.carDetails?.carNumber}"),
+                                        value:
+                                            "${value.driverData?.carDetails?.carNumber}"),
                                     rowItem(
                                         title: "Car Model",
-                                        value: "${value.driverData?.carDetails?.carModel}"),
-                                    rowItem(title: "Car Color", value: "${value.driverData?.carDetails?.carColor}"),
+                                        value:
+                                            "${value.driverData?.carDetails?.carModel}"),
+                                    rowItem(
+                                        title: "Car Color",
+                                        value:
+                                            "${value.driverData?.carDetails?.carColor}"),
                                     pw.Divider(thickness: 1),
                                     pw.SizedBox(height: 10),
                                     rowItem(
                                         title: "Cost Per Mile",
-                                        value: "\$ ${bookRideValue.bookingList.first.perMileAmount}"),
+                                        value:
+                                            "kr ${bookRideValue.bookingList.first.perMileAmount}"),
                                     // rowItem(
                                     //     title: "Estimated Mile", value: "${bookRideValue.bookingList.first.id}"),
                                     pw.Divider(thickness: 1),
                                     pw.SizedBox(height: 10),
-                                    rowItem(title: "Total", value: "\$ ${bookRideValue.bookingList.first.totalAmount}"),
+                                    rowItem(
+                                        title: "Total",
+                                        value:
+                                            "kr ${bookRideValue.bookingList.first.totalAmount}"),
                                     pw.Divider(thickness: 1),
                                     pw.SizedBox(height: 10),
                                     rowItem(
-                                        title: "Name", value: profileValue.profileData?.name ?? ''),
+                                        title: "Name",
+                                        value: profileValue.profileData?.name ??
+                                            ''),
                                     rowItem(
                                         title: "Phone Number",
-                                        value: profileValue.profileData?.mobileNumber ?? ''),
+                                        value: profileValue
+                                                .profileData?.mobileNumber ??
+                                            ''),
                                     rowItem(
                                         title: "Transaction Id",
-                                        value: bookRideValue.bookingList.first.id ?? ''),
+                                        value: bookRideValue
+                                                .bookingList.first.id ??
+                                            ''),
                                   ]),
                                 ]),
                               ],

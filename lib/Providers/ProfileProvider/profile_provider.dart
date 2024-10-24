@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:taxi/Models/get_profile_model.dart';
 import 'package:taxi/Remote/api_config.dart';
@@ -23,7 +25,7 @@ class ProfileProvider with ChangeNotifier {
   final passwordController = TextEditingController();
 
   changeMobile(val) {
-    if(val.toString().trim() != "") {
+    if (val.toString().trim() != "") {
       if (val != profileData?.mobileNumber) {
         if (isVerifyMobile == false) {
           isVerifyMobile = true;
@@ -38,12 +40,16 @@ class ProfileProvider with ChangeNotifier {
       buttonEnable = false;
       notifyListeners();
     }
-
   }
 
-  changeCountryCode(val) {
-    if (val.toString().replaceAll("+", "") != profileData?.countryCode.toString().replaceAll("+", "")) {
-      if (isVerifyMobile == false) {
+  void changeCountryCode(String val) {
+    final formattedVal = val.replaceAll("+", "");
+
+    log("value======>${val.length}");
+
+    if (formattedVal.isNotEmpty &&
+        formattedVal != profileData?.countryCode?.replaceAll("+", "")) {
+      if (!isVerifyMobile) {
         isVerifyMobile = true;
         notifyListeners();
       }
@@ -51,6 +57,9 @@ class ProfileProvider with ChangeNotifier {
       isVerifyMobile = false;
       notifyListeners();
     }
+    profileData?.countryCode = formattedVal;
+
+    // Validate the button state
     validateButton();
   }
 
@@ -64,13 +73,13 @@ class ProfileProvider with ChangeNotifier {
     } else {
       buttonEnable = true;
     }
-   if(from == "auth") {
-     notifyListeners();
-   }
+    if (from == "auth") {
+      notifyListeners();
+    }
   }
 
   changeEmail(val) {
-    if(val.toString().trim().isNotEmpty) {
+    if (val.toString().trim().isNotEmpty) {
       if (val != profileData?.email) {
         if (isVerifyEmail == false) {
           isVerifyEmail = true;
@@ -86,7 +95,6 @@ class ProfileProvider with ChangeNotifier {
 
       notifyListeners();
     }
-
   }
 
   Future<void> getProfileApi({
@@ -103,6 +111,7 @@ class ProfileProvider with ChangeNotifier {
       return;
     }
     final getProfileResponse = GetProfileModel.fromJson(jsonDecode(data.body));
+    log("getProfileResponse ========> ${data.body}");
 
     if (context.mounted) {
       if (getProfileResponse.status == 200) {
@@ -127,8 +136,6 @@ class ProfileProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
-
 
   Future<void> changeProfileValueLocally(
       {required ProfileData profileData}) async {

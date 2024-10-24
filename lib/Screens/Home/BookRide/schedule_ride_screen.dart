@@ -34,6 +34,7 @@ class ScheduleRideScreen extends StatelessWidget {
             builder: (context, value, child) {
               return GoogleMapWidget(
                 polylines: Set<Polyline>.of(value.polylines.values),
+                markers: value.markers,
               );
             },
           ),
@@ -171,6 +172,8 @@ class ScheduleRideScreen extends StatelessWidget {
                                       isSuccess: false);
                                   return;
                                 }
+
+
                                 context.read<BookRideProvider>().bookRideApi(
                                       context: context,
                                       pickUpLat: context
@@ -228,6 +231,7 @@ class ScheduleRideScreen extends StatelessWidget {
                                               .scheduleTime
                                               .toString(),
                                     );
+                                
                               },
                               text: AppLocalizations.of(context)!.confirm,
                             )),

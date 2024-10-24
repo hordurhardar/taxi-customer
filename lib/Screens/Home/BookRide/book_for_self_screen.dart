@@ -10,15 +10,34 @@ import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_images.dart';
 import 'package:taxi/Utils/helper_methods.dart';
 import 'package:taxi/Widgets/common_footer_widget.dart';
+import 'package:taxi/Widgets/contact_sheet_widget.dart';
 import 'package:taxi/Widgets/google_map_widget.dart';
+import 'package:taxi/Widgets/list_tile_card_widget.dart';
 import 'package:taxi/Widgets/svg_picture.dart';
 import 'package:taxi/Widgets/toolbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class BookForSelfScreen extends StatelessWidget {
+class BookForSelfScreen extends StatefulWidget {
   static const routeName = "/bookForSelf_screen";
 
   const BookForSelfScreen({super.key});
+
+  @override
+  State<BookForSelfScreen> createState() => _BookForSelfScreenState();
+}
+
+class _BookForSelfScreenState extends State<BookForSelfScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timestamp) async {
+        context
+            .read<ContactProvider>()
+            .getContactListFromPhone(context: context, fromGetStarted: false);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +50,7 @@ class BookForSelfScreen extends StatelessWidget {
             builder: (context, value, child) {
               return GoogleMapWidget(
                 polylines: Set<Polyline>.of(value.polylines.values),
+                markers: value.markers,
               );
             },
           ),
@@ -85,124 +105,31 @@ class BookForSelfScreen extends StatelessWidget {
                                       fontWeight: FontWeight.w500,
                                       color: AppColors.greyHint),
                                   heightGap(30),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.circle_outlined),
-                                      widthGap(10),
-                                      const SvgPic(
-                                          image: AppImages.personYellow),
-                                      widthGap(10),
-                                      TextWidget(
-                                        text: AppLocalizations.of(context)!
-                                            .mySelf,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: AppColors.black,
-                                      ),
-                                    ],
+                                  ListTileCardWidget(
+                                    onTap: Navigator.of(context).pop,
+                                    titleText:
+                                        AppLocalizations.of(context)!.mySelf,
+                                    leadingIconPath: AppImages.personYellow,
+                                    isTrailingVisible: false,
                                   ),
                                   Consumer<ContactProvider>(
                                     builder: (context, value, child) {
                                       return value.selectedContactList.isEmpty
                                           ? const SizedBox()
-                                          : ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount: value
-                                                  .selectedContactList.length,
-                                              itemBuilder: (context, index) {
-                                                final contact = value
-                                                    .selectedContactList[index];
-                                                return Column(
-                                                  children: [
-                                                    const Divider(height: 28),
-                                                    InkWell(
-                                                      onTap: () async {
-                                                        await context
-                                                            .read<
-                                                                ContactProvider>()
-                                                            .makeContactSelection(
-                                                                index: index);
-                                                      },
-                                                      child: Row(
-                                                        children: [
-                                                          (contact?.isSelected ??
-                                                                  false)
-                                                              ? const Icon(
-                                                                  Icons.circle,
-                                                                  color: AppColors
-                                                                      .primary)
-                                                              : const Icon(Icons
-                                                                  .circle_outlined),
-                                                          widthGap(8),
-                                                          const SvgPic(
-                                                              image: AppImages
-                                                                  .jYellow),
-                                                          widthGap(8),
-                                                          TextWidget(
-                                                              text: contact
-                                                                      ?.name ??
-                                                                  '',
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              color: AppColors
-                                                                  .black),
-                                                          widthGap(8),
-                                                          const Icon(
-                                                              Icons.circle,
-                                                              size: 8,
-                                                              color: AppColors
-                                                                  .primary),
-                                                          widthGap(8),
-                                                          TextWidget(
-                                                            text: contact
-                                                                    ?.phone ??
-                                                                '',
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: AppColors
-                                                                .greyHint,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    heightGap(5),
-                                                  ],
-                                                );
-                                              },
-                                            );
+                                          : _buildContactList(value);
                                     },
                                   ),
-                                  const Divider(height: 28),
-                                  InkWell(
-                                    onTap: () async {
-                                      print("sjha");
-                                      await context
-                                          .read<ContactProvider>()
-                                          .askPermissions(
-                                              context: context,
-                                              fromGetStarted: false);
-                                      await _showContactBottomSheet(
-                                          context: context);
+                                  const Divider(),
+                                  ListTileCardWidget(
+                                    onTap: () {
+                                      _showContactBottomSheet(
+                                        context: context,
+                                      );
                                     },
-                                    child: Row(
-                                      children: [
-                                        widthGap(36),
-                                        const SvgPic(image: AppImages.contact),
-                                        widthGap(10),
-                                        TextWidget(
-                                          text: AppLocalizations.of(context)!
-                                              .chooseAnotherContacts,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          color: AppColors.black,
-                                        ),
-                                      ],
-                                    ),
+                                    leadingIconPath: AppImages.contact,
+                                    isTrailingVisible: false,
+                                    titleText: AppLocalizations.of(context)!
+                                        .chooseAnotherContacts,
                                   ),
                                   heightGap(80),
                                 ],
@@ -234,75 +161,47 @@ class BookForSelfScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildContactList(ContactProvider value) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: value.selectedContactList.length,
+      itemBuilder: (context, index) {
+        final contact = value.selectedContactList[index];
+        return Column(
+          children: [
+            const Divider(),
+            ListTileCardWidget(
+              titleText: contact?.name ?? '',
+              subtitleText: contact?.phone ?? '',
+              isTrailingVisible: false,
+              leadingWidget: (contact?.isSelected ?? true)
+                  ? const Icon(Icons.circle, color: AppColors.primary)
+                  : const Icon(Icons.circle_outlined),
+              onTap: () async {
+                await context
+                    .read<ContactProvider>()
+                    .makeContactSelection(index: index);
+              },
+            ),
+            // heightGap(5),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _showContactBottomSheet({
     BuildContext? context,
   }) async {
-    await showModalBottomSheet(
-        context: context!,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (BuildContext c) {
-          return Padding(
-            padding: MediaQuery.of(c).viewInsets,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 0.0),
-              height: deviceHeight(context) * 0.70,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Consumer<ContactProvider>(
-                        builder: (context, value, child) {
-                          return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: value.contactRequestList.length,
-                            itemBuilder: (context, index) {
-                              final contact = value.contactRequestList[index];
-                              return InkWell(
-                                onTap: () async {
-                                  await context
-                                      .read<ContactProvider>()
-                                      .selectContact(contact: contact);
-                                  Navigator.of(context).pop();
-                                },
-                                child: SizedBox(
-                                  height: 60,
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                              child: TextWidget(
-                                                  text: contact.name ?? '')),
-                                          TextWidget(text: contact.phone ?? ''),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        });
+    await showContactListSheet(
+      context: context!,
+      onSelect: (contact) async {
+        await context.read<ContactProvider>().selectContact(contact: contact);
+        if (!context.mounted) return;
+        Navigator.of(context).pop();
+      },
+    );
   }
 }
 

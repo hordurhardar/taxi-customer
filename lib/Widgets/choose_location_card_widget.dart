@@ -70,9 +70,9 @@ class ChooseLocationCardWidget extends StatelessWidget {
               child: Column(
                 children: [
                   InkWell(
-                       onTap: onTapPickUpLocationField,
-                      child:  TextFormFieldWidget(
-                         controller: yourLocationController,
+                      onTap: onTapPickUpLocationField,
+                      child: TextFormFieldWidget(
+                        controller: yourLocationController,
                         showBorder: false,
                         enabled: false,
                         hintText: 'Your Location',
@@ -89,7 +89,7 @@ class ChooseLocationCardWidget extends StatelessWidget {
                               ? () {
                                   context
                                       .read<DestinationProvider>()
-                                      .disableDropFieldCall(value: false);
+                                      .disableDropFieldCall(value: true);
                                   Navigator.of(context).pop();
                                 }
                               : null,
@@ -109,21 +109,21 @@ class ChooseLocationCardWidget extends StatelessWidget {
                         Row(
                           children: [
                             GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   Navigator.of(context)
                                       .pushNamed(SavedPlacesScreen.routeName)
                                       .then((onValue) {
                                     if (dropLocationController!.text
                                         .trim()
-                                        .isNotEmpty){
-                                      if(callBack !=null) {
+                                        .isNotEmpty) {
+                                      if (callBack != null) {
                                         callBack!();
                                       }
                                     }
-
                                   });
                                 },
-                                child: const SvgPic(image: AppImages.locationFlagYellow)),
+                                child: const SvgPic(
+                                    image: AppImages.locationFlagYellow)),
                             const SizedBox(
                               height: 36,
                               child: VerticalDivider(
@@ -131,7 +131,7 @@ class ChooseLocationCardWidget extends StatelessWidget {
                               ),
                             ),
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.of(context)
                                     .pushNamed(AddAddressScreen.routeName);
                               },

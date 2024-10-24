@@ -10,7 +10,6 @@ import 'package:taxi/Utils/helper_methods.dart';
 import 'package:taxi/Widgets/toolbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class LoyaltyPointsScreen extends StatefulWidget {
   static const routeName = "/loyaltyPoints_screen";
 
@@ -21,58 +20,58 @@ class LoyaltyPointsScreen extends StatefulWidget {
 }
 
 class _LoyaltyPointsScreenState extends State<LoyaltyPointsScreen> {
-
   @override
   void initState() {
     super.initState();
     context.read<ProfileProvider>().getProfileApi(context: context);
     Future.delayed(
       const Duration(seconds: 5),
-          () {
-              Navigator.of(context).pushReplacementNamed(ReceiptScreen.routeName);
-
+      () {
+        Navigator.of(context).pushReplacementNamed(ReceiptScreen.routeName);
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      body: Column(children: [
-        heightGap(16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Toolbar(
-            title: AppLocalizations.of(context)!.addCard,
+      body: Column(
+        children: [
+          heightGap(16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Toolbar(
+              title: AppLocalizations.of(context)!.addCard,
+            ),
           ),
-        ),
-       heightGap(deviceHeight(context) * 0.10),
-       Expanded(
-         child: InkWell(
-           onTap: () {
-           //  Navigator.of(context).pushNamed(RateDriverScreen.routeName);
-           },
-           child: Column(
-             crossAxisAlignment: CrossAxisAlignment.center,
-             children: [
-               Image.asset( AppImages.celebrate),
-
-               const TextWidget(
-                 color: AppColors.blackColor,
-                 fontWeight: FontWeight.w600,
-                 fontSize: 32,
-                 text: 'Congratulations',
-               ),
-               // const TextWidget(
-               //   color: AppColors.greyHint,
-               //   fontWeight: FontWeight.w500,
-               //   fontSize: 18,
-               //   text: 'You Win 40 Loyalty Points',
-               // ),
-             ],
-           ),
-         ),
-       ),
-      ],),
+          heightGap(deviceHeight(context) * 0.10),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                //  Navigator.of(context).pushNamed(RateDriverScreen.routeName);
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(AppImages.celebrate),
+                  const TextWidget(
+                    color: AppColors.blackColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 32,
+                    text: 'Congratulations',
+                  ),
+                  // const TextWidget(
+                  //   color: AppColors.greyHint,
+                  //   fontWeight: FontWeight.w500,
+                  //   fontSize: 18,
+                  //   text: 'You Win 40 Loyalty Points',
+                  // ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

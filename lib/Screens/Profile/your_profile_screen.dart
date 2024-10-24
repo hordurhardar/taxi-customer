@@ -205,19 +205,24 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                                             context
                                                 .read<AuthProvider>()
                                                 .changeCountryCode(
-                                                    countryCode: val.dialCode
-                                                        .toString());
-                                            value.changeCountryCode(val);
+                                                    countryCode:
+                                                        val.code.toString());
+                                            value.changeCountryCode(
+                                                val.code.toString());
                                           },
                                           // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                                           initialSelection: value.profileData
                                                       ?.countryCode !=
                                                   null
-                                              ? "${value.profileData!.countryCode!.contains("+") ? value.profileData?.countryCode : "+${value.profileData?.countryCode}"}"
+                                              ? value.profileData!.countryCode!
+                                                      .startsWith('+')
+                                                  ? value
+                                                      .profileData!.countryCode
+                                                  : '+${value.profileData!.countryCode}'
                                               : '+354',
                                           favorite: const ['+354', 'FR'],
                                           // optional. Shows only country name and flag
-                                          showCountryOnly: false,
+                                          showCountryOnly: true,
                                           // optional. Shows only country name and flag when popup is closed.
                                           showOnlyCountryWhenClosed: false,
                                           // optional. aligns the flag and the Text left
@@ -265,13 +270,36 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                                               .verify,
                                           height: 30,
                                           onPressed: () {
-                                            FocusManager.instance.primaryFocus?.unfocus();
-                                            if(Validations.instance.phoneValidation(value.phoneNumberController.text, context) == null) {
-                                              context.read<AuthProvider>().setPhone = value.phoneNumberController.text;
-                                              context.read<AuthProvider>().setFromType = FromAuthType.fromProfile;
-                                              context.read<AuthProvider>().sendOtp(context: context,
-                                                  type: "phone"
-                                              );
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                            if (Validations.instance
+                                                    .phoneValidation(
+                                                        value
+                                                            .phoneNumberController
+                                                            .text,
+                                                        context) ==
+                                                null) {
+                                              context
+                                                      .read<AuthProvider>()
+                                                      .setPhone =
+                                                  value.phoneNumberController
+                                                      .text;
+                                              context
+                                                  .read<AuthProvider>()
+                                                  .countryCode = value
+                                                      .profileData
+                                                      ?.countryCode ??
+                                                  "354";
+
+                                              context
+                                                      .read<AuthProvider>()
+                                                      .setFromType =
+                                                  FromAuthType.fromProfile;
+                                              context
+                                                  .read<AuthProvider>()
+                                                  .sendOtp(
+                                                      context: context,
+                                                      type: "phone");
                                             }
                                           },
                                         ),
@@ -300,11 +328,11 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                                     child: heightGap(10)),
                                 Visibility(
                                   visible: value.isVerifyEmail,
-                                  child:  Padding(
+                                  child: Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           AppLocalizations.of(context)!
@@ -317,13 +345,33 @@ class _YourProfileScreenState extends State<YourProfileScreen> {
                                               .verify,
                                           height: 30,
                                           onPressed: () {
-                                            FocusManager.instance.primaryFocus?.unfocus();
-                                            if(Validations.instance.phoneValidation(value.emailController.text, context) == null) {
-                                              context.read<AuthProvider>().setEmail = value.emailController.text;
-                                              context.read<AuthProvider>().setFromType = FromAuthType.fromProfile;
-                                              context.read<AuthProvider>().sendOtp(context: context,
-                                                  type: "email"
-                                              );
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                            if (Validations.instance
+                                                    .phoneValidation(
+                                                        value.emailController
+                                                            .text,
+                                                        context) ==
+                                                null) {
+                                              context
+                                                      .read<AuthProvider>()
+                                                      .setEmail =
+                                                  value.emailController.text;
+                                              context
+                                                  .read<AuthProvider>()
+                                                  .countryCode = value
+                                                      .profileData
+                                                      ?.countryCode ??
+                                                  "354";
+                                              context
+                                                      .read<AuthProvider>()
+                                                      .setFromType =
+                                                  FromAuthType.fromProfile;
+                                              context
+                                                  .read<AuthProvider>()
+                                                  .sendOtp(
+                                                      context: context,
+                                                      type: "email");
                                             }
                                           },
                                         ),

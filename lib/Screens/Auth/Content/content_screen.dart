@@ -23,7 +23,9 @@ class ContentScreen extends StatefulWidget {
 class _ContentScreenState extends State<ContentScreen> {
   @override
   void initState() {
-    context.read<HelpCenterProvider>().getContentApi(context: context, slug: "terms-conditions");
+    context
+        .read<HelpCenterProvider>()
+        .getContentApi(context: context, slug: "terms-conditions");
 
     super.initState();
   }
@@ -38,7 +40,7 @@ class _ContentScreenState extends State<ContentScreen> {
                   child: CupertinoActivityIndicator(),
                 )
               : SingleChildScrollView(
-                child: Column(
+                  child: Column(
                     children: [
                       heightGap(16),
                       Padding(
@@ -48,60 +50,63 @@ class _ContentScreenState extends State<ContentScreen> {
                           showCount: false,
                         ),
                       ),
-                      //TODO: add list here
+                      // TODO: add list here
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: EdgeInsets.all(20.0),
                         child: Html(data: value.content?[0].description ?? ""),
                       ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: value.termsConditionCheck,
-                    onChanged: (val) {
-                      print("Country Code ${context.read<AuthProvider>().countryCode}");
-                      value.updateTermsConditionCheckBoxValue(
-                          value: val!);
-                    },
-                    checkColor: AppColors.black,
-                    activeColor: AppColors.primary,
-                  ),
-                  richText(
-                    context: context,
-                    firstText: "${AppLocalizations.of(context)!
-                        .agreeWith} ${AppLocalizations.of(context)!
-                        .termsCondition}",
-                    secondText: "",
-                    // secondStyle: const TextStyle(
-                    //   color: AppColors.primary,
-                    //   fontSize: 16,
-                    //   fontWeight: FontWeight.w400,
-                    //   decoration: TextDecoration.underline,
-                    //   decorationColor: AppColors.primary,
-                    //   fontFamily: AppFonts.inter,
-                    // ),
-                    onTap: () {
-                      // Navigator.of(context)
-                      //     .pushNamed(
-                      //     ContentScreen.routeName);
-                    },
-                  )
-                ],
-              ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: value.termsConditionCheck,
+                            onChanged: (val) {
+                              print(
+                                  "Country Code ${context.read<AuthProvider>().countryCode}");
+                              value.updateTermsConditionCheckBoxValue(
+                                  value: val!);
+                            },
+                            checkColor: AppColors.black,
+                            activeColor: AppColors.primary,
+                          ),
+                          richText(
+                            context: context,
+                            firstText:
+                                "${AppLocalizations.of(context)!.agreeWith} ${AppLocalizations.of(context)!.termsCondition}",
+                            secondText: "",
+                            // secondStyle: const TextStyle(
+                            //   color: AppColors.primary,
+                            //   fontSize: 16,
+                            //   fontWeight: FontWeight.w400,
+                            //   decoration: TextDecoration.underline,
+                            //   decorationColor: AppColors.primary,
+                            //   fontFamily: AppFonts.inter,
+                            // ),
+                            onTap: () {
+                              // Navigator.of(context)
+                              //     .pushNamed(
+                              //     ContentScreen.routeName);
+                            },
+                          )
+                        ],
+                      ),
                       heightGap(20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
                         child: ElevatedButtonWidget(
                           onPressed: () {
                             FocusManager.instance.primaryFocus?.unfocus();
-                              if (value.termsConditionCheck) {
-                                context.read<AuthProvider>().registerApi(context: context);
-                              } else {
-                                showSnackBar(
-                                    context: context,
-                                    message: AppLocalizations.of(context)!
-                                        .pleaseSelectTermsAndCondition,
-                                    isSuccess: false);
-                              }
+                            if (value.termsConditionCheck) {
+                              print('yes');
+                              context
+                                  .read<AuthProvider>()
+                                  .registerApi(context: context);
+                            } else {
+                              showSnackBar(
+                                  context: context,
+                                  message: AppLocalizations.of(context)!
+                                      .pleaseSelectTermsAndCondition,
+                                  isSuccess: false);
+                            }
                           },
                           width: double.infinity,
                           text: AppLocalizations.of(context)!.signUp,
@@ -111,7 +116,7 @@ class _ContentScreenState extends State<ContentScreen> {
                       heightGap(20),
                     ],
                   ),
-              );
+                );
         },
       ),
     );

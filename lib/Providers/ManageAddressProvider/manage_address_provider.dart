@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:taxi/Models/common_model.dart';
@@ -10,10 +11,10 @@ import 'package:taxi/Utils/helper_methods.dart';
 class ManageAddressProvider with ChangeNotifier {
   bool isLoading = false;
   List<ManageAddressData>? manageAddressList = [];
-  List<String> addressType = ['Home','Office','Other'];
+  List<String> addressType = ['Home', 'Office', 'Other'];
   String selectedType = 'Home';
-  ManageAddressData? selectedAddress ;
-  bool isEdit =  false;
+  ManageAddressData? selectedAddress;
+  bool isEdit = false;
   final addressController = TextEditingController();
   TextEditingController floorController = TextEditingController();
   TextEditingController landmarkController = TextEditingController();
@@ -33,7 +34,8 @@ class ManageAddressProvider with ChangeNotifier {
   }) async {
     isLoading = true;
 
-    final data = await RemoteService().callGetApi( context: context,
+    final data = await RemoteService().callGetApi(
+      context: context,
       url: tGetAllAddress,
     );
     if (data == null) {
@@ -65,15 +67,14 @@ class ManageAddressProvider with ChangeNotifier {
     String? addressType,
   }) async {
     showLoaderDialog(context);
-    final data = await RemoteService().callPostApi(
-        context: context,
-        url: tAddAddress, jsonData: {
+    final data = await RemoteService()
+        .callPostApi(context: context, url: tAddAddress, jsonData: {
       "address": address,
       "latitude": lat,
       "longitude": long,
       "addressType": addressType,
-      "landmark":landmarkController.text.trim(),
-      "floor":floorController.text.trim(),
+      "landmark": landmarkController.text.trim(),
+      "floor": floorController.text.trim(),
     });
     if (data == null) {
       hideLoader(context);
@@ -139,17 +140,17 @@ class ManageAddressProvider with ChangeNotifier {
     String? addressType,
   }) async {
     showLoaderDialog(context);
-    final data =
-        await RemoteService().callPostApi(
-            context: context,
-            url: "$tEditAddress${selectedAddress!.id}", jsonData: {
-      "address": address,
-      "latitude": lat,
-      "longitude": long,
-      "addressType": addressType,
-      "landmark":landmarkController.text.trim(),
-      "floor":floorController.text.trim(),
-    });
+    final data = await RemoteService().callPostApi(
+        context: context,
+        url: "$tEditAddress${selectedAddress!.id}",
+        jsonData: {
+          "address": address,
+          "latitude": lat,
+          "longitude": long,
+          "addressType": addressType,
+          "landmark": landmarkController.text.trim(),
+          "floor": floorController.text.trim(),
+        });
     if (data == null) {
       hideLoader(context);
       return;
@@ -158,12 +159,12 @@ class ManageAddressProvider with ChangeNotifier {
     if (context.mounted) {
       if (editAddressApi.status == 200) {
         hideLoader(context);
-        if(editAddressApi.message.toString().trim() == "") {
+        if (editAddressApi.message.toString().trim() == "") {
           showSnackBar(
               context: context,
               message: editAddressApi.message,
               isSuccess: true);
-        }else{
+        } else {
           showSnackBar(
               context: context,
               message: "Address Updated Successfully",

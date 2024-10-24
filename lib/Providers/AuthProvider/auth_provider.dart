@@ -34,6 +34,7 @@ class AuthProvider with ChangeNotifier {
   Position? _currentPosition;
   bool passwordObSecureLogin = true;
   bool passwordObSecureSignUp = true;
+  bool code = true;
   String countryCode = '354';
   String _email = "";
   String _phone = "";
@@ -86,61 +87,48 @@ class AuthProvider with ChangeNotifier {
     var osType = await RemoteService().getOsType();
     showLoaderDialog(context);
     final data = await RemoteService()
-        .callPostApi(context: context, url: tSignUpNew, jsonData: {
-      "countryCode": countryCode.toString().replaceAll("+", ""),
-      "mobileNumber": _phone,
+        .callPostApi(context: context, url: tSignUp, jsonData: {
+      // "countryCode": countryCode.toString().replaceAll("+", ""),
+      // "mobileNumber": _phone,
       "password": _password,
       "name": _name,
       "email": _email,
       "type": "User",
-      "loginType": "Phone",
-      "gender": selectedGender,
+      "loginType": "Email",
+      // "gender": selectedGender,
       "deviceType": osType ?? 'Android',
       "deviceToken": sharedPrefs?.getString(AppStrings.fcm)
     });
+
+    print('device token ${sharedPrefs?.getString(AppStrings.fcm)}');
+    log("registerApi=====>${data?.body}");
     if (data == null) {
       hideLoader(context);
       return;
     }
     final signUpResponse = CommonModel.fromJson(jsonDecode(data.body));
+    print('data ${signUpResponse.exeTime}');
     if (context.mounted) {
+      print('first if');
       if (signUpResponse.status == 201) {
+        print('second if');
         hideLoader(context);
         showSnackBar(
             context: context, message: signUpResponse.message, isSuccess: true);
+
+        // Save the country code locally
+        sharedPrefs?.setString(
+            AppStrings.countryCode, countryCode.toString().replaceAll("+", ""));
+
         Navigator.of(context).pushNamed(VerifyCodeScreen.routeName);
       } else {
+        print('second else');
         showSnackBar(
             context: context,
             message: signUpResponse.message,
             isSuccess: false);
         hideLoader(context);
       }
-      /* } else if (signUpResponse.status == 204) {
-        showSnackBar(
-            context: context,
-            message: signUpResponse.message,
-            isSuccess: false);
-        hideLoader(context);
-      } else if (signUpResponse.status == 400) {
-        showSnackBar(
-            context: context,
-            message: signUpResponse.message,
-            isSuccess: false);
-        hideLoader(context);
-      } else if (signUpResponse.status == 406) {
-        showSnackBar(
-            context: context,
-            message: signUpResponse.message,
-            isSuccess: false);
-        hideLoader(context);
-      } else if (signUpResponse.status == 409) {
-        showSnackBar(
-            context: context,
-            message: signUpResponse.message,
-            isSuccess: false);
-        hideLoader(context);
-      }*/
     }
     notifyListeners();
   }
@@ -149,14 +137,17 @@ class AuthProvider with ChangeNotifier {
     required BuildContext context,
     required String otp,
     required String phone,
+    required String email,
   }) async {
     showLoaderDialog(context);
     final data = await RemoteService()
-        .callPostApi(context: context, url: tVerifyOtpAuthenticateNew, jsonData: {
-      "countryCode": countryCode.toString().replaceAll("+", ""),
-      "mobileNumber": phone,
+        .callPostApi(context: context, url: tVerifyOtp, jsonData: {
+      // "countryCode": countryCode.toString().replaceAll("+", ""),
+      "email": email,
+      // "mobileNumber": phone,
       "otp": otp,
     });
+
     if (data == null) {
       hideLoader(context);
       return;
@@ -171,13 +162,16 @@ class AuthProvider with ChangeNotifier {
             isSuccess: true);
         sharedPrefs?.setString(
             AppStrings.token, verifyOtpResponse.data?.token.toString() ?? '');
+
         setFromType = FromAuthType.fromSignUp;
-        Navigator.of(context).pushNamed(EnableLocationAccess.routeName);
-        // if(verifyOtpResponse.data?.user?.isProfileCompleted  != null && verifyOtpResponse.data?.user?.isProfileCompleted == false){
-        //   Navigator.of(context).pushReplacementNamed(CompleteProfileScreen.routeName);
-        // } else {
-        //   Navigator.of(context).pushReplacementNamed(BottomBarScreen.routeName);
-        // }
+        // Navigator.of(context).pushNamed(EnableLocationAccess.routeName);
+        if (verifyOtpResponse.data?.user?.isProfileCompleted != null &&
+            verifyOtpResponse.data?.user?.isProfileCompleted == false) {
+          Navigator.of(context)
+              .pushReplacementNamed(CompleteProfileScreen.routeName);
+        } else {
+          Navigator.of(context).pushReplacementNamed(BottomBarScreen.routeName);
+        }
       } else {
         showSnackBar(
             context: context,
@@ -202,8 +196,8 @@ class AuthProvider with ChangeNotifier {
     String? name,
   }) async {
     showLoaderDialog(context);
-    final data = await RemoteService()
-        .callPostApi(context: context, url: tUpdateProfile, jsonData: {
+
+    final data = {
       "gender": gender,
       "mobileNumber": mobile,
       "countryCode": countryCode.toString().replaceAll("+", ""),
@@ -214,13 +208,26 @@ class AuthProvider with ChangeNotifier {
       "profileImage": profileImage,
       "name": name,
       "isProfileCompleted": true,
-    });
-    if (data == null) {
+    };
+
+    log("updateprofile - resp ==========> $data");
+
+    final resp = await RemoteService().callPostApi(
+      context: context,
+      url: tUpdateProfile,
+      jsonData: data,
+    );
+
+    log("updateprofile - resp ==========> ${resp?.body}");
+
+    if (resp == null) {
       hideLoader(context);
       return false;
     }
+
     final updateProfileResponse =
-        UpdateProfileModel.fromJson(jsonDecode(data.body));
+        UpdateProfileModel.fromJson(jsonDecode(resp.body));
+
     if (context.mounted) {
       if (updateProfileResponse.status == 200) {
         hideLoader(context);
@@ -228,7 +235,6 @@ class AuthProvider with ChangeNotifier {
             context: context,
             message: updateProfileResponse.message,
             isSuccess: true);
-        //sharedPrefs?.setString(AppStrings.token, updateProfileResponse.data!.deviceToken.toString() ?? '');
         sharedPrefs?.setBool(AppStrings.isLogin, true);
 
         context.read<ProfileProvider>().changeProfileValueLocally(
@@ -239,7 +245,7 @@ class AuthProvider with ChangeNotifier {
             context: context,
             message: updateProfileResponse.message,
             isSuccess: false);
-        hideLoader(context);
+        // hideLoader(context);
         return false;
       }
     }
@@ -265,12 +271,15 @@ class AuthProvider with ChangeNotifier {
         ImageUploadModel.fromJson(jsonDecode(data.body));
     if (context.mounted) {
       if (imageUploadResponse.status == 200) {
+        log(file.path);
         profileImageUrl = imageUploadResponse.data?.upload ?? '';
         isLoading = false;
+        log('image uploaded => $profileImageUrl');
         showSnackBar(
-            context: context,
-            message: imageUploadResponse.message,
-            isSuccess: true);
+          context: context,
+          message: imageUploadResponse.message,
+          isSuccess: true,
+        );
       } else {
         showSnackBar(
             context: context,
@@ -290,13 +299,13 @@ class AuthProvider with ChangeNotifier {
     var osType = await RemoteService().getOsType();
     showLoaderDialog(context);
     final data = await RemoteService()
-        .callPostApi(context: context, url: tLoginNew, jsonData: {
-      "countryCode": countryCode.toString().replaceAll("+", ""),
-      "mobileNumber": email,
+        .callPostApi(context: context, url: tLogin, jsonData: {
+      // "countryCode": countryCode.toString().replaceAll("+", ""),
+      "email": email,
       "password": password,
       "type": "User",
       "deviceType": osType ?? 'Android',
-      "deviceToken": sharedPrefs?.getString(AppStrings.fcm)
+      // "deviceToken": sharedPrefs?.getString(AppStrings.fcm)
     });
     if (data == null) {
       hideLoader(context);
@@ -315,9 +324,11 @@ class AuthProvider with ChangeNotifier {
         sharedPrefs?.setString(AppStrings.userImage,
             loginResponse.data?.user?.profilePic.toString() ?? '');
         sharedPrefs?.setBool(AppStrings.isLogin, true);
+        sharedPrefs?.setString(AppStrings.countryCode,
+            loginResponse.data?.user?.country.toString() ?? '');
         if (loginResponse.data?.user?.isProfileCompleted ?? false) {
           Navigator.of(context).pushNamedAndRemoveUntil(
-            BottomBarScreen.routeName,
+            EnableLocationAccess.routeName,
             (route) => false,
           );
         } else {
@@ -445,7 +456,10 @@ class AuthProvider with ChangeNotifier {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
       _currentPosition = position;
-      _getAddressFromLatLng(context);
+
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(BottomBarScreen.routeName, (route) => false);
+      // _getAddressFromLatLng(context);
     }).catchError((e) {
       debugPrint(e);
     });
@@ -603,8 +617,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> sendOtp(
-      {required BuildContext context,
-        required String type}) async {
+      {required BuildContext context, required String type}) async {
     isLoading = true;
     showLoaderDialog(context);
     Map<String, dynamic> requestBody = {};
@@ -619,7 +632,7 @@ class AuthProvider with ChangeNotifier {
 
     final data = await RemoteService().callPostApi(
         context: context, url: tUpdateMobileEmail, jsonData: requestBody);
-    log("Response $data");
+    log("Response-------> $requestBody");
     hideLoader(context);
     if (data == null) {
       isLoading = false;
@@ -633,7 +646,7 @@ class AuthProvider with ChangeNotifier {
       if (getProfileResponse.status == 200) {
         isLoading = false;
         setFromType = FromAuthType.fromProfile;
-      Navigator.pushNamed(context, VerifyCodeScreen.routeName);
+        Navigator.pushNamed(context, VerifyCodeScreen.routeName);
       } else {
         isLoading = false;
         showSnackBar(
@@ -645,10 +658,8 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> verifyOtpApiProfile({
-    required BuildContext context,
-    required String otp
-  }) async {
+  Future<void> verifyOtpApiProfile(
+      {required BuildContext context, required String otp}) async {
     showLoaderDialog(context);
 
     Map<String, dynamic> map = {};
@@ -674,7 +685,7 @@ class AuthProvider with ChangeNotifier {
             context: context,
             message: verifyOtpResponse.message,
             isSuccess: true);
-        if(_type == "email") {
+        if (_type == "email") {
           context.read<ProfileProvider>().isVerifyEmail = false;
         } else {
           context.read<ProfileProvider>().isVerifyMobile = false;
@@ -827,7 +838,6 @@ class AuthProvider with ChangeNotifier {
         showSnackBar(
             context: context, message: logOutResponse.message, isSuccess: true);
         return true;
-
       } else {
         showSnackBar(
             context: context,

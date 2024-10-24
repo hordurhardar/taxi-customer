@@ -6,7 +6,7 @@ import 'package:taxi/CommonWidgets/text_widget.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Widgets/toolbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:contacts_service/contacts_service.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InviteScreen extends StatefulWidget {
@@ -19,8 +19,9 @@ class InviteScreen extends StatefulWidget {
 }
 
 class InviteScreenState extends State<InviteScreen> {
-  Iterable<Contact>? _contacts;
-  String appLink = 'https://play.google.com/store/apps/details?id=com.taxi.taxi247&pli=1';
+  List<Contact>? _contacts;
+  String appLink =
+      'https://play.google.com/store/apps/details?id=com.taxi.taxi247&pli=1';
 
   @override
   void initState() {
@@ -29,8 +30,12 @@ class InviteScreenState extends State<InviteScreen> {
   }
 
   Future<void> _fetchContacts() async {
-    if (await Permission.contacts.request().isGranted) {
-      Iterable<Contact>? contacts = await ContactsService.getContacts(withThumbnails: false);
+    bool permissionGranted = await Permission.contacts.request().isGranted;
+
+    if (permissionGranted) {
+      List<Contact> contacts =
+          await FlutterContacts.getContacts(withProperties: true);
+
       setState(() {
         _contacts = contacts;
       });
@@ -42,15 +47,17 @@ class InviteScreenState extends State<InviteScreen> {
   }
 
   Future<void> _shareAppLink(Contact contact) async {
+    String phoneNumber =
+        contact.phones.isNotEmpty ? contact.phones.first.number : '';
     String message =
         'Hey ${contact.displayName ?? 'Friend'}, check out this taxi booking app:\n$appLink';
 
     String url =
-        'https://wa.me/${contact.phones!.first.value}?text=${Uri.encodeComponent(message)}';
+        'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}';
 
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
+    final launched = await launchUrl(Uri.parse(url));
+
+    if (!launched) {
       throw 'Could not launch $url';
     }
   }
@@ -74,7 +81,7 @@ class InviteScreenState extends State<InviteScreen> {
                   ? ListView.builder(
                       itemCount: _contacts!.length,
                       itemBuilder: (context, index) {
-                        Contact contact = _contacts!.elementAt(index);
+                        Contact contact = _contacts![index];
                         return InkWell(
                           onTap: () async {
                             await _shareAppLink(contact);
@@ -91,11 +98,11 @@ class InviteScreenState extends State<InviteScreen> {
                                       borderRadius: BorderRadius.circular(100),
                                       color: AppColors.primary,
                                     ),
-                                    child: contact.avatar != null &&
-                                            contact.avatar!.isNotEmpty
+                                    child: contact.photo != null &&
+                                            contact.photo!.isNotEmpty
                                         ? CircleAvatar(
                                             backgroundImage:
-                                                MemoryImage(contact.avatar!),
+                                                MemoryImage(contact.photo!),
                                           )
                                         : const Icon(Icons.person,
                                             color: Colors.white),
@@ -112,10 +119,11 @@ class InviteScreenState extends State<InviteScreen> {
                                           fontWeight: FontWeight.w500,
                                           color: AppColors.black,
                                         ),
-                                        contact.phones!.isNotEmpty
+                                        contact.phones.isNotEmpty
                                             ? TextWidget(
-                                                text:
-                                                    contact.phones!.first.value,
+                                                text: contact
+                                                        .phones.first.number ??
+                                                    '',
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w500,
                                                 color: AppColors.greyHint,

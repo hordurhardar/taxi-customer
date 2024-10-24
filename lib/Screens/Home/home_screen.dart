@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi/CommonWidgets/custom_scaffold.dart';
 import 'package:taxi/CommonWidgets/text_form_field_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:taxi/CommonWidgets/text_widget.dart';
 import 'package:taxi/Providers/DestinationProvider/destination_provider.dart';
 import 'package:taxi/Providers/HomeProvider/home_provider.dart';
+import 'package:taxi/Providers/MapProvider/map_provider.dart';
 import 'package:taxi/Providers/Type/from_destination_type.dart';
 import 'package:taxi/Screens/Home/destination_screen.dart';
 import 'package:taxi/Screens/Home/pick_up_screen.dart';
+import 'package:taxi/Screens/Settings/ManageAddress/manage_address_screen.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_images.dart';
 import 'package:taxi/Utils/helper_methods.dart';
@@ -27,13 +33,65 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  clearPrefs() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    await sp.remove('promoCodeApplied');
+    await sp.remove('selectedVehicleId');
+    setState(() {});
+  }
+
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
+      clearPrefs();
       context.read<BookRideProvider>().initSocket(context);
+      _goToCurrentLocation();
     });
-
+    context.read<ManageAddressProvider>().getAllAddressApi(context: context);
     super.initState();
+  }
+
+// GoogleMapController? _mapController;
+  Future<Position> _getCurrentLocation() async {
+    setState(() {});
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
+
+  // Function to move map to current location
+  Future<void> _goToCurrentLocation() async {
+    setState(() {});
+    Position currentPosition = await _getCurrentLocation();
+    setState(() {});
+    await context
+        .read<MapProvider>()
+        .mapController
+        ?.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(currentPosition.latitude, currentPosition.longitude),
+            zoom: 15.0, // Adjust zoom as needed
+          ),
+        ));
+    // Get address from coordinates
+    await _getAddressFromLatLng(
+        currentPosition.latitude, currentPosition.longitude);
+    print(
+        'the current lat ${currentPosition.latitude} lng ${currentPosition.longitude}');
+  }
+
+  // Function to get address from coordinates
+  Future<void> _getAddressFromLatLng(double lat, double lng) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
+        String address = '${place.street}, ${place.locality}, ${place.country}';
+        print('Address: $address');
+        // Do something with the address (e.g., update UI)
+      }
+    } catch (e) {
+      print('Error getting address: $e');
+    }
   }
 
   @override
@@ -48,10 +106,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Consumer<HomeProvider>(
                 builder: (context, value, child) {
                   return SizedBox(
-                    height: MediaQuery.of(context).size.height / 1.82,
+                    height: MediaQuery.of(context).size.height / 1.62,
                     child: GoogleMapWidget(
                       markers: value.markers,
                       onCameraMove: (val) {
+                        setState(() {});
                         value.homeSearchController.text = val;
                       },
                     ),
@@ -60,9 +119,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Center(
                 //picker image on google map
-                child: Image.asset(
-                  AppImages.locationPinIcon,
-                  width: 80,
+                child: GestureDetector(
+                  onTap: () {
+                    _goToCurrentLocation();
+                  },
+                  child: Image.asset(
+                    AppImages.locationPinIcon,
+                    width: 80,
+                  ),
                 ),
               ),
               Positioned(
@@ -95,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: 0,
                 right: 0,
                 child: Container(
-                  height: 274,
+                  height: 234,
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -122,11 +186,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextWidget(
-                            text: AppLocalizations.of(context)!.whereTo,
-                            fontSize: 20,
-                            color: AppColors.blackColor,
-                            fontWeight: FontWeight.w500,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextWidget(
+                                text: AppLocalizations.of(context)!.whereTo,
+                                fontSize: 20,
+                                color: AppColors.blackColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushNamed(ManageAddressScreen.routeName);
+                                },
+                                child: TextWidget(
+                                  text: AppLocalizations.of(context)!.manage,
+                                  fontSize: 14,
+                                  color: AppColors.primary,
+                                ),
+                              )
+                            ],
                           ),
                           heightGap(20),
                           Row(
@@ -147,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                                 child: SizedBox(
                                   width: 150,
-                                  height: 180,
+                                  height: 130,
                                   child: Card(
                                     color: AppColors.primary,
                                     child: Column(
@@ -156,8 +236,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Center(
                                           child: Container(
-                                            width: 60,
-                                            height: 60,
+                                            width: 40,
+                                            height: 40,
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(100),
@@ -174,22 +254,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Center(
                                           child: TextWidget(
                                             text: AppLocalizations.of(context)!
-                                                .destination,
-                                            fontSize: 16,
+                                                .enterDestination,
+                                            fontSize: 15,
                                             color: AppColors.blackColor,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                        heightGap(10),
-                                        Center(
-                                          child: TextWidget(
-                                            color: AppColors.greyHint,
-                                            textAlign: TextAlign.center,
-                                            fontSize: 13,
-                                            text: AppLocalizations.of(context)!
-                                                .enterDestination,
-                                          ),
-                                        ),
+                                        // heightGap(10),
+                                        // Center(
+                                        //   child: TextWidget(
+                                        //     color: AppColors.greyHint,
+                                        //     textAlign: TextAlign.center,
+                                        //     fontSize: 13,
+                                        //     text: AppLocalizations.of(context)!
+                                        //         .enterDestination,
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),
@@ -199,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Consumer<ManageAddressProvider>(
                                   builder: (context, value, child) {
                                     return SizedBox(
-                                      height: 180,
+                                      height: 130,
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
                                         itemCount:
@@ -212,38 +292,52 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Card(
                                               color: AppColors.white,
                                               child: InkWell(
-                                                highlightColor: AppColors.primary.withOpacity(0.5),
-                                                focusColor: AppColors.primary.withOpacity(0.5),
-                                                onTap: (){
+                                                highlightColor: AppColors
+                                                    .primary
+                                                    .withOpacity(0.5),
+                                                focusColor: AppColors.primary
+                                                    .withOpacity(0.5),
+                                                onTap: () {
                                                   value.isEdit = true;
-                                                  value.selectedAddress = value.manageAddressList![index];
+                                                  value.selectedAddress =
+                                                      value.manageAddressList![
+                                                          index];
                                                   value.selectedType = value
-                                                      .selectedAddress!
-                                                      .addressType ??
-                                                      'Home';
+                                                          .selectedAddress!
+                                                          .addressType ??
+                                                      'Saved address';
                                                   value.addressController.text =
-                                                      value.selectedAddress!.address ??
-                                                          AppLocalizations.of(context)!
+                                                      value.selectedAddress!
+                                                              .address ??
+                                                          AppLocalizations.of(
+                                                                  context)!
                                                               .enterHere;
                                                   value.floorController.text =
-                                                      value.selectedAddress!.floor ??
+                                                      value.selectedAddress!
+                                                              .floor ??
                                                           "";
-                                                  value.landmarkController.text =
-                                                      value.selectedAddress!.landmark ??
-                                                          "";
-                                                  Navigator.pushNamed(context, AddAddressScreen.routeName);
+                                                  value.landmarkController
+                                                      .text = value
+                                                          .selectedAddress!
+                                                          .landmark ??
+                                                      "";
+                                                  Navigator.pushNamed(
+                                                      context,
+                                                      AddAddressScreen
+                                                          .routeName);
                                                 },
                                                 child: Padding(
                                                   padding:
-                                                      const EdgeInsets.all(12.0),
+                                                      const EdgeInsets.all(5.0),
                                                   child: Column(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Center(
                                                         child: Container(
-                                                          width: 60,
-                                                          height: 60,
+                                                          width: 40,
+                                                          height: 40,
                                                           decoration:
                                                               BoxDecoration(
                                                             borderRadius:
@@ -265,9 +359,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       heightGap(10),
                                                       Center(
                                                         child: TextWidget(
-                                                          text: address
-                                                                  ?.addressType ??
-                                                              '',
+                                                          text: 'Saved Address',
+                                                          //  text: address
+                                                          //     ?.addressType ??
+                                                          // '',
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontSize: 16,
@@ -275,19 +370,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               .blackColor,
                                                         ),
                                                       ),
-                                                      heightGap(10),
+                                                      heightGap(5),
                                                       TextWidget(
                                                         textAlign:
                                                             TextAlign.center,
                                                         maxLines: 1,
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
-                                                        text: address?.address ??
-                                                            '',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        text:
+                                                            address?.address ??
+                                                                '',
                                                         fontWeight:
                                                             FontWeight.w500,
-                                                        fontSize: 13,
-                                                        color: AppColors.greyText,
+                                                        fontSize: 12,
+                                                        color:
+                                                            AppColors.greyText,
                                                       ),
                                                     ],
                                                   ),

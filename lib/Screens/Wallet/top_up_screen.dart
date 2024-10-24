@@ -22,9 +22,21 @@ class TopUpScreen extends StatefulWidget {
 
 class _TopUpScreenState extends State<TopUpScreen> {
   List timeSlot = [
-    {'label': 'Paypal', 'value': 1,'icon':AppImages.googleLogo,},
-    {'label': 'Apple Pay', 'value': 2,'icon':AppImages.appleLogo,},
-    {'label': 'Google Pay', 'value': 3,'icon':AppImages.googleLogo,},
+    {
+      'label': 'Paypal',
+      'value': 1,
+      'icon': AppImages.googleLogo,
+    },
+    {
+      'label': 'Apple Pay',
+      'value': 2,
+      'icon': AppImages.appleLogo,
+    },
+    {
+      'label': 'Google Pay',
+      'value': 3,
+      'icon': AppImages.googleLogo,
+    },
   ];
   int _oneValue = -1;
   @override
@@ -47,7 +59,6 @@ class _TopUpScreenState extends State<TopUpScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(
-
                       width: double.infinity,
                       child: Image.asset(AppImages.topUp),
                     ),
@@ -59,9 +70,13 @@ class _TopUpScreenState extends State<TopUpScreen> {
                       fontWeight: FontWeight.w500,
                     ),
                     heightGap(8),
-                    ListTileCardWidget(title: AppLocalizations.of(context)!.addMoney,icon: AppImages.walletYellow,arrowColor: AppColors.primary,),
-
-                    heightGap(8),TextWidget(
+                    ListTileCardWidget(
+                      titleText: AppLocalizations.of(context)!.addMoney,
+                      leadingIconPath: AppImages.walletYellow,
+                      arrowColor: AppColors.primary,
+                    ),
+                    heightGap(8),
+                    TextWidget(
                       text: AppLocalizations.of(context)!.morePaymentOptions,
                       fontSize: 20,
                       color: AppColors.blackColor,
@@ -71,51 +86,53 @@ class _TopUpScreenState extends State<TopUpScreen> {
                       elevation: 5,
                       child: Column(
                           children: List.generate(timeSlot.length, (index) {
-                            final item = timeSlot[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 4.0,bottom: 4.0),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SvgPic(image: item['icon']),
-                                        widthGap(8),
-                                        Expanded(
-                                          child: Text(
-                                            (item['label']),
-                                            // style: Typographies.largeBodyStyle(),
-                                          ),
-                                        ),
-                                        Radio(
-                                            activeColor: AppColors.primary,
-                                            value: item['value'],
-                                            groupValue: _oneValue,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _oneValue = value!;
-                                              });
-                                            }),
-                                      ],
+                        final item = timeSlot[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SvgPic(image: item['icon']),
+                                    widthGap(8),
+                                    Expanded(
+                                      child: Text(
+                                        (item['label']),
+                                        // style: Typographies.largeBodyStyle(),
+                                      ),
                                     ),
-                                  ),
-                                  if(index != timeSlot.length - 1)
-                                  const Divider()
-                                ],
+                                    Radio(
+                                        activeColor: AppColors.primary,
+                                        value: item['value'],
+                                        groupValue: _oneValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _oneValue = value!;
+                                          });
+                                        }),
+                                  ],
+                                ),
                               ),
-                            );
-                          })),
+                              if (index != timeSlot.length - 1) const Divider()
+                            ],
+                          ),
+                        );
+                      })),
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          CommonFooterWidget(cartItem: ElevatedButtonWidget(onPressed: () {
-
-          }, text: AppLocalizations.of(context)!.confirmPayment)),
+          CommonFooterWidget(
+              cartItem: ElevatedButtonWidget(
+                  onPressed: () {},
+                  text: AppLocalizations.of(context)!.confirmPayment)),
         ],
       ),
     );

@@ -1,18 +1,24 @@
 // ignore_for_file: constant_identifier_names
 
-const String BASE_URL = BASE_URL_LIVE;
-const String BASE_URL_LIVE = 'http://13.50.11.124:5353/api/';
-//const String BASE_URL_LIVE = 'http://3.134.21.118:9211/api/';
-const String BASE_URL_LOCAL = 'http://192.168.0.131:9211/api/';
-//const String IMAGE_URL = 'https://b2btobacco.s3.amazonaws.com/';
-const String IMAGE_URL = 'https://sugamaya.s3.amazonaws.com/';
+const String BASE_URL = BASE_URL_LOCAL;
+// const String BASE_URL_LIVE = 'http://13.50.11.124:5353/api/';
+// const String BASE_URL_LIVE = 'http://192.168.1.47:9211/api/';
+// const String BASE_URL_LOCAL = 'http://192.168.0.131:9211/api/';
+// const String BASE_URL_LIVE = 'http://13.50.11.124:5353/api/';
+const String BASE_URL_LOCAL =
+    'http://ec2-63-33-37-36.eu-west-1.compute.amazonaws.com/api/';
+// const String BASE_URL_LOCAL = 'http://192.168.1.67:9211/api/';
+// const String IMAGE_URL = 'https://b2btobacco.s3.amazonaws.com';
+// const String IMAGE_URL = 'https://sugamaya.s3.amazonaws.com';
+const String IMAGE_URL = 'https://taxi-app.s3.eu-west-1.amazonaws.com/';
 const String GOOGLE_API_KEY = 'AIzaSyDbxbcNuOlVTolfigYexsDVfyHNrpeQ_eI';
 
 String tSignUp = 'app/auth/sign-up';
-String tSignUpNew = 'app/auth/sign-up-new';
-String tVerifyOtpAuthenticate = 'app/auth/verify-otp-authenticate';
+// String tSignUpNew = 'app/auth/sign-up-new';
+// String tVerifyOtpAuthenticate = 'app/auth/verify-otp-authenticate';
 String tVerifyOtpAuthenticateNew = 'app/auth/verify-otp-authenticate-new';
 String tLogin = 'app/auth/login';
+
 String tLoginNew = 'app/auth/login-new';
 String tUpdateProfile = 'app/user/update-profile';
 String tForgotPassword = 'app/auth/forget-password-new';
@@ -52,8 +58,9 @@ String tGetContent = 'common/get-content';
 String tGetBookingList = 'app/booking/get-booking-list-customer';
 String tGetBooking = 'app/booking/get-booking';
 String tCancelBooking = 'app/booking/cancel-ride';
+String tFetchemergencyContact = 'app/.....';
+String tAddEmergencyContact = 'app/.....';
 
 class ApiConfig {
   //static String getCategoryList = "common/category-listing";
-
 }

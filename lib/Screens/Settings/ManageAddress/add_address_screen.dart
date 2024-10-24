@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taxi/CommonWidgets/custom_scaffold.dart';
@@ -41,7 +43,7 @@ class AddAddressScreen extends StatelessWidget {
                             : AppLocalizations.of(context)!.addAddress,
                       ),
                     ),
-                    heightGap(deviceHeight(context) * 0.25),
+                    heightGap(deviceHeight(context) * 0.45),
                     Expanded(
                       child: SizedBox(
                         width: double.infinity,
@@ -120,29 +122,29 @@ class AddAddressScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  heightGap(16),
-                                  TextWidget(
-                                    color: AppColors.blackColor,
-                                    fontWeight: FontWeight.w500,
-                                    text: AppLocalizations.of(context)!.floor,
-                                  ),
-                                  heightGap(8),
-                                  TextFormFieldWidget(
-                                    controller: value.floorController,
-                                    hintText: AppLocalizations.of(context)!
-                                        .enterFloor,
-                                  ),
-                                  heightGap(8),
-                                  TextWidget(
-                                    color: AppColors.blackColor,
-                                    fontWeight: FontWeight.w500,
-                                    text:
-                                        AppLocalizations.of(context)!.landmark,
-                                  ),
-                                  heightGap(8),
-                                  TextFormFieldWidget(
-                                    controller: value.landmarkController,
-                                  ),
+                                  // heightGap(16),
+                                  // TextWidget(
+                                  //   color: AppColors.blackColor,
+                                  //   fontWeight: FontWeight.w500,
+                                  //   text: AppLocalizations.of(context)!.floor,
+                                  // ),
+                                  // heightGap(8),
+                                  // TextFormFieldWidget(
+                                  //   controller: value.floorController,
+                                  //   hintText: AppLocalizations.of(context)!
+                                  //       .enterFloor,
+                                  // ),
+                                  // heightGap(8),
+                                  // TextWidget(
+                                  //   color: AppColors.blackColor,
+                                  //   fontWeight: FontWeight.w500,
+                                  //   text:
+                                  //       AppLocalizations.of(context)!.landmark,
+                                  // ),
+                                  // heightGap(8),
+                                  // TextFormFieldWidget(
+                                  //   controller: value.landmarkController,
+                                  // ),
                                   heightGap(20),
                                   ElevatedButtonWidget(
                                       onPressed: () async {

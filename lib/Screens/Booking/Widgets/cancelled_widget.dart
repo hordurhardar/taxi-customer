@@ -28,38 +28,44 @@ class CancelledWidget extends StatelessWidget {
                     final booking = value.bookingList[index];
                     var diff = "0";
                     DateTime? startDateTime;
-                      if (booking.date != null &&
-                        booking.endRideTime != null) {
-                      startDateTime = DateFormat("yyyy-MM-dd HH:mm").parse(booking.date!);
+                    if (booking.date != null && booking.endRideTime != null) {
+                      startDateTime =
+                          DateFormat("yyyy-MM-dd HH:mm").parse(booking.date!);
                       var endDateTime = DateTime.parse(booking.endRideTime!);
                       var dif = endDateTime.difference(startDateTime).inMinutes;
                       diff = dif.toString();
                     }
-                    return value.bookingList.isEmpty? const NoDataWidget():  Card(
-                      elevation: 5,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            CardWidget(
-                              driverImage: booking.driver?.profileImage ?? '',
-                              name: booking.driver?.name ?? 'No Name',
-                              rating: booking.driverRating.toString(),
-                              mile: booking.totalDistance ?? "0",
-                              min: diff,
-                              rate: booking.perMileAmount.toString(),
-                              date: booking.date != null
-                                  ? formattedDateTime(booking.date.toString())
-                                  : 'Date not available',
-                              carNumber: booking.vehicleNumber ?? '',
-                              carType: booking.carType ?? '',
-                              startLocation: booking.pickupAddress ?? '',
-                              endLocation: booking.destinationAddress ?? '',
+                    return value.bookingList.isEmpty
+                        ? const NoDataWidget()
+                        : Card(
+                            elevation: 5,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  CardWidget(
+                                    driverImage:
+                                        booking.customer?.profileImage ?? '',
+                                    name: booking.customer?.name ?? 'No Name',
+                                    rating: booking.driverRating.toString(),
+                                    mile: booking.totalDistance ?? "0",
+                                    min: diff,
+                                    rate: booking.perMileAmount.toString(),
+                                    date: booking.date != null
+                                        ? formattedDateTime(
+                                            booking.date.toString(),
+                                          )
+                                        : 'Date not available',
+                                    carNumber: booking.vehicleNumber ?? '',
+                                    carType: booking.carType ?? '',
+                                    startLocation: booking.pickupAddress ?? '',
+                                    endLocation:
+                                        booking.destinationAddress ?? '',
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    );
+                          );
                   },
                 );
         },

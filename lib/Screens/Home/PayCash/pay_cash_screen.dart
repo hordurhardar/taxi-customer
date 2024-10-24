@@ -81,11 +81,17 @@ class PayCashScreen extends StatelessWidget {
                                 elevation: 0,
                                 showFlag: false,
                                 yourLocationController: TextEditingController(
-                                    text:
-                                        bookRideValue.bookingList.isNotEmpty ? bookRideValue.bookingList.first.pickupAddress ?? "" : ""),
+                                    text: bookRideValue.bookingList.isNotEmpty
+                                        ? bookRideValue.bookingList.first
+                                                .pickupAddress ??
+                                            ""
+                                        : ""),
                                 dropLocationController: TextEditingController(
-                                    text:
-                                        bookRideValue.bookingList.isNotEmpty ? bookRideValue.bookingList.first.destinationAddress ?? "" : ""),
+                                    text: bookRideValue.bookingList.isNotEmpty
+                                        ? bookRideValue.bookingList.first
+                                                .destinationAddress ??
+                                            ""
+                                        : ""),
                                 onTapPickUpLocationField: () {},
                                 dropEnabled: false,
                               ),
@@ -130,15 +136,18 @@ class PayCashScreen extends StatelessWidget {
                                                             100),
                                                     color:
                                                         AppColors.greyBorder),
-                                                child:
-                                                    value.driverData !=
-                                                            null && value.driverData?.image!=null
-                                                        ? Image.network("$IMAGE_URL${value.driverData?.image!}")
-                                                        : Image.asset(
-                                                            AppImages.user,
-                                                            //'https://b2btobacco.s3.amazonaws.com/taxi/profile/image_1712987083086.png',
-                                                            fit: BoxFit.cover,
-                                                          ),
+                                                child: value.driverData !=
+                                                            null &&
+                                                        value.driverData
+                                                                ?.image !=
+                                                            null
+                                                    ? Image.network(
+                                                        "$IMAGE_URL${value.driverData?.image!}")
+                                                    : Image.asset(
+                                                        AppImages.user,
+                                                        //'https://b2btobacco.s3.amazonaws.com/taxi/profile/image_1712987083086.png',
+                                                        fit: BoxFit.cover,
+                                                      ),
                                               ),
                                             ),
                                             widthGap(10),
@@ -184,7 +193,7 @@ class PayCashScreen extends StatelessWidget {
                                                       BorderRadius.circular(
                                                           2))),
                                           backgroundColor:
-                                          WidgetStateProperty.all<Color>(
+                                              WidgetStateProperty.all<Color>(
                                                   AppColors.primary)),
                                       onPressed: () {},
                                       child: Padding(
@@ -200,7 +209,7 @@ class PayCashScreen extends StatelessWidget {
                                             )),
                                             TextWidget(
                                                 text:
-                                                    '\$ ${bookRideValue.bookingList.isNotEmpty ? bookRideValue.bookingList.first.totalAmount != null ? double.parse(bookRideValue.bookingList.first.totalAmount.toString()).toStringAsFixed(2) :"": ""}'),
+                                                    'kr ${bookRideValue.bookingList.isNotEmpty ? bookRideValue.bookingList.first.totalAmount != null ? double.parse(bookRideValue.bookingList.first.totalAmount.toString()).toStringAsFixed(2) : "" : ""}'),
                                           ],
                                         ),
                                       )),
@@ -220,7 +229,8 @@ class PayCashScreen extends StatelessWidget {
               cartItem: ElevatedButtonWidget(
             text: AppLocalizations.of(context)!.cashPaid,
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed(LoyaltyPointsScreen.routeName);
+              Navigator.of(context)
+                  .pushReplacementNamed(LoyaltyPointsScreen.routeName);
             },
           )),
         ],

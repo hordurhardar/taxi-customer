@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -57,14 +58,14 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   @override
   void dispose() {
     _timer.cancel();
-    otpController.dispose();
+    // otpController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop:onWillPop,
+      onWillPop: onWillPop,
       child: CustomScaffold(
         body: Padding(
           padding: const EdgeInsets.only(right: 20.0, left: 20.0),
@@ -96,7 +97,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   TextWidget(
                     color: AppColors.primary,
                     textAlign: TextAlign.center,
-                    text: context.read<AuthProvider>().countryCode ?? "",
+                    text: context.read<AuthProvider>().countryCode,
                   ),
                   const TextWidget(
                     color: AppColors.primary,
@@ -106,7 +107,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   TextWidget(
                     color: AppColors.primary,
                     textAlign: TextAlign.center,
-                    text: context.read<AuthProvider>().getPhone ?? "",
+                    text: context.read<AuthProvider>().getPhone,
                   ),
                 ],
               ),
@@ -163,6 +164,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                     return;
                   }
                   context.read<AuthProvider>().verifyOtpApiSignUp(
+                      email: context.read<AuthProvider>().getEmail,
                       context: context,
                       otp: otpController.text,
                       phone: context.read<AuthProvider>().getPhone);
@@ -219,6 +221,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   }
                   if (context.read<AuthProvider>().getFromType ==
                       FromAuthType.fromForgotPassword) {
+                    log('verify otp from forgot-pass');
                     context.read<AuthProvider>().verifyOtpApi(
                         context: context,
                         otp: otpController.text,
@@ -226,10 +229,13 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                     return;
                   } else if (context.read<AuthProvider>().getFromType ==
                       FromAuthType.fromProfile) {
+                    log('verify otp from profile');
                     context.read<AuthProvider>().verifyOtpApiProfile(
                         context: context, otp: otpController.text);
                   }
+                  log('verify otp from general');
                   context.read<AuthProvider>().verifyOtpApiSignUp(
+                      email: context.read<AuthProvider>().getEmail,
                       context: context,
                       otp: otpController.text,
                       phone: context.read<AuthProvider>().getPhone);

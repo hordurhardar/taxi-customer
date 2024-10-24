@@ -32,8 +32,6 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
-
   Future<void> _getAddressFromLatLng(BuildContext context) async {
     await placemarkFromCoordinates(
             currentPosition!.latitude, currentPosition!.longitude)
@@ -56,8 +54,6 @@ class HomeProvider with ChangeNotifier {
     });
   }
 
-
-
   Future<void> getAllDriverApi({
     required BuildContext context,
     required String lat,
@@ -67,7 +63,8 @@ class HomeProvider with ChangeNotifier {
     log('call');
     isLoading = true;
 
-    final data = await RemoteService().callGetApi( context: context,
+    final data = await RemoteService().callGetApi(
+      context: context,
       url: '$tGetAllDriver?lat=$lat&long=$long',
     );
     if (data == null) {
@@ -85,7 +82,8 @@ class HomeProvider with ChangeNotifier {
             Marker(
               markerId: MarkerId(element.id.toString()),
               // position:  LatLng(double.parse(element.latitude.toString()), double.parse(element.longitude.toString())),
-              position: LatLng(element.latitude ?? 0.0, element.longitude ?? 0.0),
+              position:
+                  LatLng(element.latitude ?? 0.0, element.longitude ?? 0.0),
               draggable: true,
               onDragEnd: (value) {
                 // value is the new position

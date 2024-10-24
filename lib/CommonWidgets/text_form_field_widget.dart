@@ -33,7 +33,8 @@ class TextFormFieldWidget extends StatelessWidget {
   final TextAlign textAlign;
   final double? borderRadius;
   final Widget? label;
-
+  final VoidCallback? onTap;
+  final FocusNode? focusNode; // Add focusNode parameter
   const TextFormFieldWidget({
     super.key,
     this.cursorColor = AppColors.primary,
@@ -65,6 +66,8 @@ class TextFormFieldWidget extends StatelessWidget {
     this.hintColor = AppColors.greyHint,
     this.textAlign = TextAlign.start,
     this.borderRadius,
+    this.onTap,
+    this.focusNode, // Add this
   });
 
   @override
@@ -74,6 +77,7 @@ class TextFormFieldWidget extends StatelessWidget {
         if (label != null) label!,
         TextFormField(
           key: textFieldKey,
+          onTap: onTap,
           textAlign: textAlign,
           controller: controller,
           cursorColor: cursorColor,
@@ -88,7 +92,7 @@ class TextFormFieldWidget extends StatelessWidget {
           textInputAction: textInputAction,
           textAlignVertical: TextAlignVertical.center,
           maxLength: maxLength,
-          expands: false,
+          expands: false, focusNode: focusNode, // Use focusNode here
           decoration: InputDecoration(
             border: border,
             filled: filled,
@@ -119,23 +123,33 @@ class TextFormFieldWidget extends StatelessWidget {
               letterSpacing: 0.6,
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide:  BorderSide(color: showBorder ?  AppColors.greyBorder : Colors.transparent, width: 1),
+              borderSide: BorderSide(
+                  color: showBorder ? AppColors.greyBorder : Colors.transparent,
+                  width: 1),
               borderRadius: BorderRadius.circular(borderRadius ?? 8),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide:  BorderSide(color: showBorder ?  AppColors.greyBorder : Colors.transparent, width: 1),
+              borderSide: BorderSide(
+                  color: showBorder ? AppColors.greyBorder : Colors.transparent,
+                  width: 1),
               borderRadius: BorderRadius.circular(borderRadius ?? 8),
             ),
             disabledBorder: OutlineInputBorder(
-              borderSide:  BorderSide(color: showBorder ?  AppColors.greyBorder : Colors.transparent, width: 1),
+              borderSide: BorderSide(
+                  color: showBorder ? AppColors.greyBorder : Colors.transparent,
+                  width: 1),
               borderRadius: BorderRadius.circular(borderRadius ?? 8),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide:  BorderSide(color: showBorder ?  AppColors.greyBorder : Colors.transparent, width: 1),
+              borderSide: BorderSide(
+                  color: showBorder ? AppColors.greyBorder : Colors.transparent,
+                  width: 1),
               borderRadius: BorderRadius.circular(borderRadius ?? 8),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide:  BorderSide(color: showBorder ?  AppColors.greyBorder : Colors.transparent, width: 1),
+              borderSide: BorderSide(
+                  color: showBorder ? AppColors.greyBorder : Colors.transparent,
+                  width: 1),
               borderRadius: BorderRadius.circular(borderRadius ?? 8),
             ),
           ),

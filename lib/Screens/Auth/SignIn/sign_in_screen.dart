@@ -1,6 +1,11 @@
 // import 'dart:html';
 
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taxi/CommonWidgets/custom_scaffold.dart';
@@ -11,10 +16,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:taxi/Providers/AuthProvider/auth_provider.dart';
 import 'package:taxi/Screens/Auth/ForgotPassword/forgot_password_screen.dart';
 import 'package:taxi/Screens/Auth/SignUp/sign_up_screen.dart';
+import 'package:taxi/Screens/BottomNavBar/bottom_bar_screen.dart';
+import 'package:taxi/Screens/Home/home_screen.dart';
 import 'package:taxi/Utils/app_colors.dart';
 import 'package:taxi/Utils/app_fonts.dart';
 import 'package:taxi/Utils/app_images.dart';
 import 'package:taxi/Utils/helper_methods.dart';
+import 'package:taxi/Utils/social_login.dart';
 import 'package:taxi/Utils/validations.dart';
 import 'package:taxi/Widgets/svg_picture.dart';
 
@@ -177,7 +185,7 @@ class SignInScreen extends StatelessWidget {
     // );
 
     return WillPopScope(
-      onWillPop:onWillPop,
+      onWillPop: onWillPop,
       child: CustomScaffold(
         extendBodyBehindAppBar: true,
         statusBarColor: Colors.transparent,
@@ -243,62 +251,83 @@ class SignInScreen extends StatelessWidget {
                               text: AppLocalizations.of(context)!.welcomeBack,
                             ),
                           ),
+                          // heightGap(10),
+                          // TextWidget(
+                          //   color: AppColors.blackColor,
+                          //   fontWeight: FontWeight.w500,
+                          //   text: AppLocalizations.of(context)!.phoneNumber,
+                          // ),
+                          // Container(
+                          //     decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(8),
+                          //         border:
+                          //             Border.all(color: AppColors.greyBorder)),
+                          //     child: Row(
+                          //       children: [
+                          //         CountryCodePicker(
+                          //           onChanged: (value) {
+                          //             context
+                          //                 .read<AuthProvider>()
+                          //                 .changeCountryCode(
+                          //                     countryCode:
+                          //                         value.dialCode.toString());
+                          //           },
+                          //           // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                          //           initialSelection: 'IS',
+                          //           favorite: const ['+354'],
+                          //           // optional. Shows only country name and flag
+                          //           showCountryOnly: false,
+                          //           // optional. Shows only country name and flag when popup is closed.
+                          //           showOnlyCountryWhenClosed: false,
+                          //           // optional. aligns the flag and the Text left
+                          //           alignLeft: false,
+                          //           showFlagMain: false,
+                          //         ),
+                          //         const SizedBox(
+                          //           height: 25,
+                          //           child: VerticalDivider(
+                          //             color: AppColors.greyBorder,
+                          //           ),
+                          //         ),
+                          //         Expanded(
+                          //           child: TextFormFieldWidget(
+                          //             showBorder: false,
+                          //             keyboardType: TextInputType.number,
+                          //             controller: emailController,
+                          //             maxLength: 13,
+                          //             hintText: AppLocalizations.of(context)!
+                          //                 .phoneNumber,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     )),
+                          // // TextFormFieldWidget(
+                          // //   hintText: AppLocalizations.of(context)!.enterEmail,
+                          // //   controller: emailController,
+                          // //   keyboardType: TextInputType.emailAddress,
+                          // //   validator: (value) => Validations.instance.emailValidation(value!),
+                          // // ),
                           heightGap(10),
                           TextWidget(
                             color: AppColors.blackColor,
                             fontWeight: FontWeight.w500,
-                            text: AppLocalizations.of(context)!.phoneNumber,
+                            text: 'Email',
                           ),
-                          Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border:
-                                      Border.all(color: AppColors.greyBorder)),
-                              child: Row(
-                                children: [
-                                  CountryCodePicker(
-                                    onChanged: (value) {
-                                      context
-                                          .read<AuthProvider>()
-                                          .changeCountryCode(
-                                              countryCode:
-                                                  value.dialCode.toString());
-                                    },
-                                    // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                                    initialSelection: 'IS',
-                                    favorite: const ['+354'],
-                                    // optional. Shows only country name and flag
-                                    showCountryOnly: false,
-                                    // optional. Shows only country name and flag when popup is closed.
-                                    showOnlyCountryWhenClosed: false,
-                                    // optional. aligns the flag and the Text left
-                                    alignLeft: false,
-                                    showFlagMain: false,
-                                  ),
-                                  const SizedBox(
-                                    height: 25,
-                                    child: VerticalDivider(
-                                      color: AppColors.greyBorder,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextFormFieldWidget(
-                                      showBorder: false,
-                                      keyboardType: TextInputType.number,
-                                      controller: emailController,
-                                      maxLength: 13,
-                                      hintText: AppLocalizations.of(context)!
-                                          .phoneNumber,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          // TextFormFieldWidget(
-                          //   hintText: AppLocalizations.of(context)!.enterEmail,
-                          //   controller: emailController,
-                          //   keyboardType: TextInputType.emailAddress,
-                          //   validator: (value) => Validations.instance.emailValidation(value!),
-                          // ),
+                          Consumer<AuthProvider>(
+                            builder: (context, value, child) {
+                              return TextFormFieldWidget(
+                                hintText: 'Please enter email',
+                                controller: emailController,
+                                isPassword: false,
+                                // obscureText: value.passwordObSecureLogin,
+                                onVisibilityIconTap: () {
+                                  value.changeObSecureForLogin();
+                                },
+                                validator: (value) => Validations.instance
+                                    .emailValidation(value!, context),
+                              );
+                            },
+                          ),
                           heightGap(10),
                           TextWidget(
                             color: AppColors.blackColor,
@@ -331,8 +360,8 @@ class SignInScreen extends StatelessWidget {
                               },
                               child: TextWidget(
                                 color: AppColors.primary,
-                                text:
-                                    AppLocalizations.of(context)!.forgotPassword,
+                                text: AppLocalizations.of(context)!
+                                    .forgotPassword,
                                 decoration: TextDecoration.underline,
                                 decorationColor: AppColors.primary,
                               ),
@@ -341,14 +370,24 @@ class SignInScreen extends StatelessWidget {
                           heightGap(10),
                           ElevatedButtonWidget(
                             onPressed: () {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              if (formKey.currentState!.validate()) {
-                                context.read<AuthProvider>().loginApi(
-                                      context: context,
-                                      password: passwordController.text,
-                                      email: emailController.text,
-                                    );
-                              }
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (builder) =>
+                              //             const BottomBarScreen()));
+                              context.read<AuthProvider>().loginApi(
+                                    context: context,
+                                    password: passwordController.text,
+                                    email: emailController.text,
+                                  );
+                              // FocusManager.instance.primaryFocus?.unfocus();
+                              // if (formKey.currentState!.validate()) {
+                              //   context.read<AuthProvider>().loginApi(
+                              //         context: context,
+                              //         password: passwordController.text,
+                              //         email: emailController.text,
+                              //       );
+                              // }
                             },
                             width: double.infinity,
                             text: AppLocalizations.of(context)!.signIn,
@@ -381,27 +420,30 @@ class SignInScreen extends StatelessWidget {
                           //     socialContainer(
                           //       image: AppImages.googleLogo,
                           //       onTap: () async {
-                          //         final loginResult = await SocialLogin.instance.googleLogin();
-                          //
-                          //         if (loginResult.status) {
+                          //         final loginResult =
+                          //             await SocialLogin.instance.googleLogin();
+
+                          //         if (loginResult.status == true) {
+                          //           log("loginresponse=====>${loginResult.status}");
                           //           final jsonData = {
-                          //             "email": loginResult.emailAddress,
-                          //             //
-                          //             // "name": loginResult.name,
-                          //             // "type": "User",
-                          //             // "loginType":
-                          //             // loginResult.socialType,
-                          //             // "deviceToken":
-                          //             // await FirebaseMessaging
-                          //             //     .instance
-                          //             //     .getToken(),
-                          //             // "socialId":
-                          //             // loginResult.socialId
+                          //             "email": loginResult.emailAddress ?? "",
+                          //             "name": loginResult.name ?? "",
+                          //             "type": "User",
+                          //             "loginType": loginResult.socialType ?? "",
+                          //             "deviceToken": await FirebaseMessaging
+                          //                 .instance
+                          //                 .getToken(),
+                          //             "socialId": loginResult.socialId
                           //           };
+                          //           log("loginresponse=====>${jsonData.toString()}");
                           //           if (kDebugMode) {
                           //             print("$jsonData");
                           //           }
-                          //           await context.read<AuthProvider>().socialLoginApi(context: context, jsonData: jsonData);
+                          //           await context
+                          //               .read<AuthProvider>()
+                          //               .socialLoginApi(
+                          //                   context: context,
+                          //                   jsonData: jsonData);
                           //         } else {
                           //           log("message");
                           //         }
@@ -414,7 +456,7 @@ class SignInScreen extends StatelessWidget {
                           //     ),
                           //   ],
                           // ),
-                          // heightGap(10),
+                          heightGap(10),
                           Center(
                             child: richText(
                               context: context,

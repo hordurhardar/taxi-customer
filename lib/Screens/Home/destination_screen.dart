@@ -28,7 +28,7 @@ class DestinationScreen extends StatefulWidget {
 class _DestinationScreenState extends State<DestinationScreen> {
   @override
   void initState() {
-     context.read<DestinationProvider>().setDestinationYourLocationController();
+    context.read<DestinationProvider>().setDestinationYourLocationController();
     super.initState();
   }
 
@@ -77,9 +77,9 @@ class _DestinationScreenState extends State<DestinationScreen> {
                                 .getDropPlacesListApi(
                                     context: context, input: p0);
                           },
-                          callBack: (){
+                          callBack: () {
                             Navigator.of(context)
-                                .pushNamed(BookRideScreen.routeName);
+                                .pushReplacementNamed(BookRideScreen.routeName);
                           },
                         ),
                         heightGap(10),
@@ -97,7 +97,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                               });
                             },
                             child: ListTileCardWidget(
-                                title:
+                                titleText:
                                     AppLocalizations.of(context)!.savedPlaces)),
                         heightGap(10),
                         if (context

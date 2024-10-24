@@ -127,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const Divider(height: 12),
 
                       //FOR NOTIFICATION
-                       ListTile(
+                      ListTile(
                         onTap: () {
                           Navigator.of(context)
                               .pushNamed(NotificationScreen.routeName);
@@ -142,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const Divider(height: 12),
 
                       //FOR PAYMENT METHODS
-                      /*ListTile(
+                      ListTile(
                         onTap: () {
                           Navigator.of(context)
                               .pushNamed(PaymentMethodScreen.routeName);
@@ -154,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         trailing:
                             const SvgPic(image: AppImages.arrowForwardYellow),
                       ),
-                      const Divider(height: 12),*/
+                      const Divider(height: 12),
 
                       //FOR PRE-BOOKED RIDES LIST
                       ListTile(
@@ -187,7 +187,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const Divider(height: 12),
 
                       //FOR EMERGENCY CONTACT
-                      /*ListTile(
+                      ListTile(
                         onTap: () {
                           Navigator.of(context)
                               .pushNamed(EmergencyScreen.routeName);
@@ -199,12 +199,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         trailing:
                             const SvgPic(image: AppImages.arrowForwardYellow),
                       ),
-                      const Divider(height: 12),*/
+                      const Divider(height: 12),
 
                       //FOR HELP CENTER
-                      /*ListTile(
+                      ListTile(
                         onTap: () {
-                          Navigator.of(context).pushNamed(HelpCenterScreen.routeName);
+                          Navigator.of(context)
+                              .pushNamed(HelpCenterScreen.routeName);
                         },
                         leading: const SvgPic(image: AppImages.helpcenter),
                         title: TextWidget(
@@ -213,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         trailing:
                             const SvgPic(image: AppImages.arrowForwardYellow),
                       ),
-                      const Divider(height: 12),*/
+                      const Divider(height: 12),
 
                       //FOR INVITE FRIENDS
                       ListTile(
@@ -231,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const Divider(height: 12),
 
                       //FOR PROMO SCREEN
-                      /*ListTile(
+                      ListTile(
                         onTap: () {
                           Navigator.of(context)
                               .pushNamed(PromoScreen.routeName);
@@ -243,7 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         trailing:
                             const SvgPic(image: AppImages.arrowForwardYellow),
                       ),
-                      const Divider(height: 12),*/
+                      const Divider(height: 12),
 
                       //FOR LOGOUT
                       ListTile(

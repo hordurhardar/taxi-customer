@@ -27,7 +27,6 @@ class _CancelTaxiBookingState extends State<CancelTaxiBooking> {
   @override
   void initState() {
     context.read<BookingProvider>().getCancelReasons(context: context);
-
     super.initState();
   }
 
@@ -85,31 +84,30 @@ class _CancelTaxiBookingState extends State<CancelTaxiBooking> {
                             ],
                           );
                         })),
-                        /*  Column(
-                          children: List.generate(timeSlot.length, (index) {
-                            final item = timeSlot[index];
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Radio(
-                                    activeColor: Colors.blue,
-                                    value: item['value'],
-                                    groupValue: _oneValue,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _oneValue = value!;
-                                      });
-                                    }),
-                                Expanded(
-                                  child: Text(
-                                    (item['label']),
-                                    // style: Typographies.largeBodyStyle(),
-                                  ),
-                                ),
-                              ],
-                            );
-                          })),*/
-
+                        // Column(
+                        //     children: List.generate(timeSlot.length, (index) {
+                        //   final item = timeSlot[index];
+                        //   return Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Radio(
+                        //           activeColor: Colors.blue,
+                        //           value: item['value'],
+                        //           groupValue: _oneValue,
+                        //           onChanged: (value) {
+                        //             setState(() {
+                        //               _oneValue = value!;
+                        //             });
+                        //           }),
+                        //       Expanded(
+                        //         child: Text(
+                        //           (item['label']),
+                        //           // style: Typographies.largeBodyStyle(),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   );
+                        // })),
                         Visibility(
                           visible: bookingProvider.selectedReason == "Other",
                           child: const Divider(
@@ -148,28 +146,30 @@ class _CancelTaxiBookingState extends State<CancelTaxiBooking> {
                 ),
               ),
               CommonFooterWidget(
-                  cartItem: ElevatedButtonWidget(
-                onPressed: () {
-                  if (bookingProvider.selectedReason == "" ||
-                      bookingProvider.selectedReason == "Other") {
-                    bookingProvider.selectedReason =
-                        bookingProvider.reasonController.text.trim();
-                  }
-                  print(bookingProvider.selectedReason);
-                  if (bookingProvider.selectedReason != "") {
-                    bookRideProvider.cancelRide(
+                cartItem: ElevatedButtonWidget(
+                  onPressed: () {
+                    if (bookingProvider.selectedReason == "" ||
+                        bookingProvider.selectedReason == "Other") {
+                      bookingProvider.selectedReason =
+                          bookingProvider.reasonController.text.trim();
+                    }
+                    print(bookingProvider.selectedReason);
+                    if (bookingProvider.selectedReason != "") {
+                      bookRideProvider.cancelRide(
                         context: context,
                         bookingId: widget.bookingId,
-                        reason: bookingProvider.selectedReason);
-                  } else {
-                    showSnackBar(
-                        context: context,
-                        message: "Please select reason to cancel",
-                        isSuccess: false);
-                  }
-                },
-                text: AppLocalizations.of(context)!.cancelRide,
-              )),
+                        reason: bookingProvider.selectedReason,
+                      );
+                    } else {
+                      showSnackBar(
+                          context: context,
+                          message: "Please select reason to cancel",
+                          isSuccess: false);
+                    }
+                  },
+                  text: AppLocalizations.of(context)!.cancelRide,
+                ),
+              ),
             ],
           );
         },
