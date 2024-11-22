@@ -154,30 +154,33 @@ class _BookingScreenState extends State<BookingScreen> {
           ),
         ),
         body: TabBarView(physics: NeverScrollableScrollPhysics(), children: [
-          isIceland == false
-              ? Center(
-                  child: Text(
-                    'You are not in Iceland',
-                    style: TextStyle(fontSize: 20, color: Colors.red),
-                  ),
-                )
-              : ActiveWidget(),
-          isIceland == false
-              ? Center(
-                  child: Text(
-                    'You are not in Iceland',
-                    style: TextStyle(fontSize: 20, color: Colors.red),
-                  ),
-                )
-              : CompletedWidget(),
-          isIceland == false
-              ? Center(
-                  child: Text(
-                    'You are not in Iceland',
-                    style: TextStyle(fontSize: 20, color: Colors.red),
-                  ),
-                )
-              : CancelledWidget(),
+          // isIceland == false
+          //     ? Center(
+          //         child: Text(
+          //           'You are not in Iceland',
+          //           style: TextStyle(fontSize: 20, color: Colors.red),
+          //         ),
+          //       )
+          //     : 
+              ActiveWidget(),
+          // isIceland == false
+          //     ? Center(
+          //         child: Text(
+          //           'You are not in Iceland',
+          //           style: TextStyle(fontSize: 20, color: Colors.red),
+          //         ),
+          //       )
+          //     : 
+              CompletedWidget(),
+          // isIceland == false
+          //     ? Center(
+          //         child: Text(
+          //           'You are not in Iceland',
+          //           style: TextStyle(fontSize: 20, color: Colors.red),
+          //         ),
+          //       )
+          //     : 
+              CancelledWidget(),
         ]),
       ),
     );

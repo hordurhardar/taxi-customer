@@ -14,10 +14,11 @@
 // const String GOOGLE_API_KEY = 'AIzaSyDbxbcNuOlVTolfigYexsDVfyHNrpeQ_eI'; 
 
 
-const String BASE_URL = BASE_URL_LOCAL;
+const String BASE_URL = BASE_URL_LIVE;
 // const String BASE_URL_LIVE = 'http://localhost:9211/api/';
-const String BASE_URL_LIVE = 'http://63.33.37.36:9211/api/';
-//const String BASE_URL_LIVE = 'http://3.134.21.118:9211/api/';
+// const String BASE_URL_LIVE = 'http://63.33.37.36:9211/api/';
+const String BASE_URL_LIVE = 'http://13.50.11.124:5353/api/';
+// const String BASE_URL_LIVE = 'http://3.134.21.118:9211/api/';
 const String BASE_URL_LOCAL = 'http://192.168.106.16:9211/api/';
 //const String IMAGE_URL = 'https://b2btobacco.s3.amazonaws.com/';
 const String IMAGE_URL = 'https://sugamaya.s3.amazonaws.com/';

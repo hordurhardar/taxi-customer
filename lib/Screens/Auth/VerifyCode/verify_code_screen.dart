@@ -97,18 +97,18 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   TextWidget(
                     color: AppColors.primary,
                     textAlign: TextAlign.center,
-                    text: context.read<AuthProvider>().countryCode,
+                    text: context.read<AuthProvider>().getEmail,
                   ),
-                  const TextWidget(
-                    color: AppColors.primary,
-                    textAlign: TextAlign.center,
-                    text: "-",
-                  ),
-                  TextWidget(
-                    color: AppColors.primary,
-                    textAlign: TextAlign.center,
-                    text: context.read<AuthProvider>().getPhone,
-                  ),
+                  // const TextWidget(
+                  //   color: AppColors.primary,
+                  //   textAlign: TextAlign.center,
+                  //   text: "-",
+                  // ),
+                  // TextWidget(
+                  //   color: AppColors.primary,
+                  //   textAlign: TextAlign.center,
+                  //   text: context.read<AuthProvider>().getPhone,
+                  // ),
                 ],
               ),
               heightGap(30),

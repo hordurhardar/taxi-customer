@@ -197,7 +197,7 @@
      "didNotReceiveOTP": "Fékkst ekki OTP?",
      "verifyCode": "Staðfesta kóða",
      "agreeWith": "Sammála",
-     "pleaseEnterTheCodeWeJustSentToEmail": "Vinsamlegast sláðu inn kóðann sem við sendum á Símanúmer.",
+     "pleaseEnterTheCodeWeJustSentToEmail": "Vinsamlegast sláðu inn kóðann sem við sendum í tölvupósti",
      "termsCondition": "Skilmálar og skilyrði",
      "enterEmail": "Sláðu inn tölvupóstfang",
      "createAccount": "Búa til reikning",

@@ -198,7 +198,7 @@
    "didNotReceiveOTP": "Didn’t receive OTP?",
    "verifyCode": "Verify Code",
    "agreeWith": "I agree with",
-   "pleaseEnterTheCodeWeJustSentToEmail": "Please enter the code we just sent to Phone Number",
+   "pleaseEnterTheCodeWeJustSentToEmail": "Please enter the code we just sent to Email",
    "termsCondition": "Terms & Condition",
    "enterEmail": "Enter Email",
    "createAccount": "Create Account",

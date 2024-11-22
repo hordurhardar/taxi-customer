@@ -141,7 +141,8 @@ class ContactProvider with ChangeNotifier {
 
         try {
           response = await http.post(
-            Uri.parse("http://192.168.106.16:9211/api/common/storeContactData"),
+            // Uri.parse("http://192.168.106.16:9211/api/common/storeContactData"),
+            Uri.parse("http://63.33.37.36:9211/api/common/storeContactData"),
             headers: <String, String>{},
             body: jsonData,
           );

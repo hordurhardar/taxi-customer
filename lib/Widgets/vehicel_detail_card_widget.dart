@@ -72,7 +72,7 @@ class VehicleDetailCardWidget extends StatelessWidget {
                           Row(
                             children: [
                               TextWidget(
-                                text: 'kr$miles',
+                                text: ' kr$miles',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
